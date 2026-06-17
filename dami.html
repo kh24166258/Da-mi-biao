@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>你飞哥原创出品</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f7fb; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; padding: 2rem 1.5rem; color: #1e293b; position: relative; }
+        .container { max-width: 1800px; margin: 0 auto; }
+        .hero-banner { background: linear-gradient(135deg, #1e293b, #2d3a4e); border-radius: 32px; padding: 1.5rem 2rem; margin-bottom: 2rem; text-align: center; }
+        .hero-title { font-size: 2rem; font-weight: 800; letter-spacing: 2px; color: #FFE8C5; }
+        .page-tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; background: white; padding: 0.5rem 1.5rem; border-radius: 60px; width: fit-content; border: 1px solid #eef2f8; }
+        .tab-btn { padding: 8px 24px; border-radius: 40px; font-size: 0.9rem; font-weight: 600; cursor: pointer; background: #f1f5f9; color: #475569; border: none; transition: all 0.2s; }
+        .tab-btn.active { background: #2c3e66; color: white; }
+        .toolbar { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
+        .toolbar-left { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .toolbar-right { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .tool-btn { background: #eef2ff; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.75rem; cursor: pointer; font-weight: 500; }
+        .tool-btn-primary { background: #2c3e66; color: white; }
+        .tool-btn-primary:hover { background: #1f3a5f; }
+        .tool-btn-danger { background: #fee2e2; color: #dc2626; }
+        .tool-btn-success { background: #dcfce7; color: #16a34a; }
+        .filter-badge { background: #f1f5f9; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
+        .column-control { background: white; border-radius: 28px; padding: 0.8rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; display: flex; align-items: center; justify-content: flex-end; gap: 1rem; flex-wrap: wrap; }
+        .column-control label { font-size: 0.75rem; color: #4b6b8f; }
+        .column-control input { width: 80px; padding: 4px 8px; border-radius: 40px; border: 1px solid #cbd5e1; font-size: 0.75rem; text-align: center; }
+        .quality-panel { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; }
+        .quality-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 8px 0; }
+        .quality-title { font-weight: 700; font-size: 1rem; color: #d97706; }
+        .quality-stats { font-size: 0.75rem; color: #6c7a91; }
+        .quality-rules { margin-top: 12px; border-top: 1px solid #eef2f8; padding-top: 12px; display: none; }
+        .rule-item { background: #fefce8; border-left: 3px solid #facc15; padding: 10px 12px; margin-bottom: 10px; border-radius: 12px; font-size: 0.75rem; position: relative; }
+        .rule-actions { position: absolute; top: 10px; right: 12px; display: flex; gap: 8px; }
+        .edit-rule, .copy-rule, .delete-rule { background: none; border: none; cursor: pointer; font-size: 0.7rem; padding: 2px 6px; border-radius: 20px; }
+        .edit-rule { background: #e0e7ff; color: #2563eb; }
+        .copy-rule { background: #dcfce7; color: #16a34a; }
+        .delete-rule { background: #fee2e2; color: #dc2626; }
+        .add-rule-btn { background: #eef2ff; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.7rem; cursor: pointer; margin-top: 8px; }
+        .force-rule-item { background: #fef2f2; border-left: 3px solid #dc2626; padding: 10px 12px; margin-bottom: 10px; border-radius: 12px; font-size: 0.75rem; }
+        .force-rule-title { color: #dc2626; font-weight: 600; }
+        .rule-switch-area { margin-top: 12px; padding: 8px 12px; background: #f1f5f9; border-radius: 16px; display: flex; flex-wrap: wrap; gap: 12px; }
+        .switch-label { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; cursor: pointer; }
+        .switch-label input { width: 16px; height: 16px; cursor: pointer; }
+        .self-check-area { margin-top: 8px; padding: 8px 10px; background: #f8fafc; border-radius: 12px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; border: 1px solid #e2e8f0; }
+        .self-check-label { display: flex; align-items: center; gap: 6px; font-size: 0.7rem; cursor: pointer; }
+        .qc-result { margin-top: 8px; padding: 8px 10px; border-radius: 12px; font-size: 0.7rem; }
+        .qc-pass { background: #ecfdf5; border-left: 3px solid #10b981; color: #065f46; }
+        .qc-fail { background: #fef2f2; border-left: 3px solid #ef4444; color: #991b1b; }
+        .qc-fail summary { font-weight: 600; cursor: pointer; margin-bottom: 4px; }
+        .qc-fail ul { margin-left: 20px; padding-top: 4px; }
+        .qc-pending { background: #fefce8; border-left: 3px solid #facc15; color: #854d0e; }
+        .upload-section { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .upload-label { background: #2c3e66; color: white; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-size: 0.85rem; display: inline-block; }
+        .upload-label:hover { background: #1f3a5f; }
+        .filter-panel { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; }
+        .filter-title { font-weight: 600; margin-bottom: 0.8rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .filter-mode-buttons { display: flex; gap: 8px; }
+        .mode-btn { padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; cursor: pointer; border: 1px solid #cbd5e1; background: white; }
+        .mode-btn.active { background: #2c3e66; color: white; border-color: #2c3e66; }
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8rem; }
+        .filter-item { display: flex; flex-direction: column; }
+        .filter-item label { font-size: 0.7rem; font-weight: 600; color: #4b6b8f; margin-bottom: 4px; }
+        .filter-item input { width: 100%; padding: 6px 12px; border-radius: 40px; border: 1px solid #cbd5e1; font-size: 0.75rem; outline: none; }
+        .filter-actions { display: flex; gap: 8px; margin-top: 8px; justify-content: flex-end; }
+        .btn-filter { background: #2c3e66; color: white; border: none; padding: 6px 16px; border-radius: 40px; cursor: pointer; font-size: 0.75rem; }
+        .btn-reset { background: #e2e8f0; color: #1e293b; }
+        .main-layout { display: flex; gap: 1.5rem; }
+        .content-area { flex: 1; min-width: 0; }
+        .settings-panel { width: 260px; background: white; border-radius: 28px; padding: 1.2rem; border: 1px solid #eef2f8; height: fit-content; position: sticky; top: 1rem; }
+        .settings-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 1rem; border-bottom: 1px solid #eef2f8; padding-bottom: 8px; }
+        .setting-group label { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; margin-bottom: 8px; cursor: pointer; }
+        .btn-reset-settings { background: #eef2ff; border: none; padding: 6px 12px; border-radius: 40px; font-size: 0.7rem; cursor: pointer; width: 100%; margin-top: 8px; }
+        .products-grid { display: grid; gap: 1.5rem; transition: all 0.2s; }
+        .product-card { background: white; border-radius: 28px; overflow: hidden; border: 1px solid #eef2f8; }
+        .carousel-section { background: #fafcff; border-bottom: 1px solid #f0f2f6; padding: 0.8rem; }
+        .carousel-container { position: relative; width: 100%; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; background: #ffffff; border-radius: 20px; overflow: hidden; }
+        .carousel-img { width: 100%; height: 100%; object-fit: contain; }
+        .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); border: none; color: white; font-size: 1.4rem; cursor: pointer; width: 32px; height: 32px; border-radius: 40px; z-index: 10; }
+        .btn-prev { left: 8px; }
+        .btn-next { right: 8px; }
+        .image-counter { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.6); color: white; font-size: 0.65rem; padding: 2px 8px; border-radius: 40px; }
+        .card-content { padding: 1rem; display: flex; flex-direction: column; gap: 8px; }
+        .info-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; font-size: 0.75rem; border-bottom: 1px dashed #edf2f7; padding-bottom: 6px; }
+        .info-label { font-weight: 600; min-width: 95px; background: #f1f6fd; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; color: #2c5282; }
+        .info-value { color: #1e2f44; word-break: break-word; flex: 1; }
+        .id-link { cursor: pointer; color: #2563eb; text-decoration: underline; }
+        .price-tag { font-weight: 800; background: #fff2f4; padding: 2px 12px; border-radius: 40px; color: #b91c2c; font-size: 0.9rem; display: inline-block; }
+        .size-actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 4px 0; }
+        .size-btn { background: #e6f0ff; border: none; padding: 4px 12px; border-radius: 30px; font-size: 0.7rem; cursor: pointer; }
+        .modal-mask { position: fixed; top:0;left:0;width:100%;height:100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+        .modal-container { background: white; max-width: 90vw; max-height: 80vh; overflow: auto; border-radius: 28px; padding: 1.2rem; }
+        .size-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+        .size-table th, .size-table td { border: 1px solid #cbd5e1; padding: 5px; text-align: left; vertical-align: top; }
+        .go-top { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #2c3e66; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: all 0.3s; z-index: 100; opacity: 0; visibility: hidden; }
+        .go-top.show { opacity: 1; visibility: visible; }
+        .go-top:hover { background: #1f3a5f; transform: translateY(-3px); }
+        .no-result { text-align: center; padding: 2rem; color: #6c7a91; grid-column: 1/-1; }
+        .attr-block { background: #fefce8; border-left: 3px solid #facc15; padding: 0.5rem; border-radius: 16px; font-size: 0.7rem; }
+        .attr-line { margin-bottom: 4px; }
+        .attr-key { font-weight: 700; color: #b45309; display: inline-block; min-width: 90px; }
+        .match-info { background: #e6f0ff; border-radius: 12px; padding: 6px 10px; margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.7rem; }
+        .match-series { color: #1e4a76; font-weight: 500; }
+        .match-btn { background: #2c3e66; color: white; border: none; padding: 4px 12px; border-radius: 30px; font-size: 0.65rem; cursor: pointer; }
+        .simple-product-card { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #eef2f8; display: flex; flex-direction: column; }
+        .simple-img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; padding: 0.5rem; background: #fafcff; }
+        .simple-content { padding: 0.8rem; display: flex; flex-direction: column; gap: 6px; }
+        .simple-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; font-size: 0.7rem; border-bottom: 1px dashed #edf2f7; padding-bottom: 4px; }
+        .simple-label { font-weight: 600; min-width: 70px; background: #f1f6fd; padding: 1px 6px; border-radius: 16px; font-size: 0.65rem; }
+        .simple-link { color: #2563eb; text-decoration: underline; }
+        .simple-id-link { cursor: pointer; color: #2563eb; text-decoration: underline; }
+        .trigger-group, .checks-group, .exclude-group { border-radius: 12px; padding: 8px; margin-top: 8px; }
+        .trigger-group { background: #fefce8; }
+        .exclude-group { background: #cffafe; }
+        .checks-group { background: #ecfdf5; }
+        .group-header { font-size: 0.7rem; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+        .condition-item { background: white; border-radius: 8px; padding: 6px 8px; margin-bottom: 6px; display: flex; gap: 6px; align-items: center; flex-wrap: wrap; border: 1px solid #e2e8f0; }
+        .condition-item select, .condition-item input { font-size: 0.7rem; padding: 4px 6px; border-radius: 16px; border: 1px solid #cbd5e1; }
+        .remove-cond-btn { background: #fee2e2; border: none; border-radius: 20px; padding: 2px 8px; font-size: 0.6rem; cursor: pointer; color: #dc2626; }
+        .add-cond-btn { background: #eef2ff; border: none; border-radius: 20px; padding: 4px 12px; font-size: 0.65rem; cursor: pointer; margin-top: 6px; }
+        .loading-icon-small { display: inline-block; width: 10px; height: 10px; border: 2px solid #f3f3f3; border-top: 2px solid #2c3e66; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 6px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @media (max-width: 900px) { .main-layout { flex-direction: column; } .settings-panel { width: 100%; position: static; } .go-top { width: 40px; height: 40px; font-size: 18px; bottom: 20px; right: 20px; } .filter-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero-banner">
+        <div class="hero-title">🍔 为了汉堡 · 🍚 为了大米 · 🚇 为了上海交通卡</div>
+    </div>
+
+    <div class="page-tabs">
+        <button class="tab-btn active" id="tabProductQc">📦 质检页面（全业务线通用）</button>
+        <button class="tab-btn" id="tabCustomProduct">👕 定制原商品页面（定制业务匹配用）</button>
+    </div>
+
+    <div id="productsArea">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <button class="tool-btn tool-btn-primary" id="exportRulesBtn">📤 导出质检规则</button>
+                <label class="tool-btn" style="cursor:pointer;">📥 导入质检规则<input type="file" id="importRulesInput" accept=".json" style="display:none;"></label>
+                <button class="tool-btn tool-btn-danger" id="showOnlyErrorsBtn">⚠️ 只显示质检不通过</button>
+                <button class="tool-btn" id="showAllBtn" style="display:none;">📋 显示全部商品</button>
+                <button class="tool-btn tool-btn-success" id="exportSelfCheckBtn">💾 导出自检结果</button>
+            </div>
+            <div class="toolbar-right">
+                <div class="filter-badge" id="filterBadge" style="display:none;">🔍 已过滤：仅显示不通过商品</div>
+            </div>
+        </div>
+
+        <div class="quality-panel">
+            <div class="quality-header" onclick="toggleQualityRules()">
+                <span class="quality-title">🔍 AI质检规则配置（点击名称展开规则配置页面）</span>
+                <span class="quality-stats" id="qualityStats">0 条自定义规则 | 强制规则: 4 条</span>
+            </div>
+            <div id="qualityRulesContent" class="quality-rules">
+                <div class="force-rule-item">
+                    <div class="force-rule-title">🔒 强制规则1（不可删除/修改）</div>
+                    <div>📝 检查商品名称中是否有重复的词语（2字及以上中文词语、英文单词、2位及以上数字）</div>
+                    <div class="rule-error">⚠️ 单个汉字、单个数字不计入重复，仅检测2字及以上的词语/数字序列重复</div>
+                </div>
+                <div class="force-rule-item">
+                    <div class="force-rule-title">🔒 强制规则2（不可删除/修改）</div>
+                    <div>📏 检查尺码表数值顺序：下一区间的整体范围必须大于上一区间</div>
+                    <div class="rule-error">⚠️ 例如：160-165 → 162-167 正确；165 → 170 正确；165 → 165 根据下方开关决定是否报错</div>
+                </div>
+                <div class="force-rule-item">
+                    <div class="force-rule-title">🔒 强制规则3（不可删除/修改）</div>
+                    <div>🖼️ 检查商品首图四角是否为纯白底（#FFFFFF）</div>
+                    <div class="rule-error">⚠️ 检测图片四个角（各10x10像素区域），任一角不是纯白色 #FFFFFF 即报错</div>
+                </div>
+                <div class="force-rule-item">
+                    <div class="force-rule-title">🔒 强制规则4（不可删除/修改）</div>
+                    <div>🧵 检查成分含量：每100%为一组，每组内各成分占比总和必须精确等于100%，且按降序排列</div>
+                    <div class="rule-error">⚠️ 例如：棉97% 氨纶3% 正确；棉66% 聚酯纤维34% 正确；聚酯纤维34% 棉66% 错误</div>
+                </div>
+                <div class="rule-switch-area" style="flex-direction:column; align-items:flex-start;">
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; width:100%;">
+                        <label class="switch-label">
+                            <input type="checkbox" id="strictEqualCheckbox">
+                            <span>🔘 尺码表严格模式：开启后重复值（相等）也算错误（例如 165 → 165）</span>
+                        </label>
+                        <span style="font-size:0.65rem; color:#6c7a91;">默认关闭，重复值不报错</span>
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; width:100%; margin-top:4px;">
+                        <label class="switch-label">
+                            <input type="checkbox" id="whiteBgCheckbox" checked>
+                            <span>🖼️ 白底图检测：开启后检测商品首图四角是否为纯白底（#FFFFFF）</span>
+                        </label>
+                        <span style="font-size:0.65rem; color:#6c7a91;">默认开启</span>
+                    </div>
+                </div>
+                <div id="rulesList"></div>
+                <button class="add-rule-btn" onclick="showAddRuleModal(null)">+ 添加自定义联动规则</button>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div><label class="upload-label" for="excelUpload">📂 点击上传质检数据源 Excel</label><input type="file" id="excelUpload" accept=".xlsx, .xls" style="display: none;"></div>
+            <div class="upload-info">上传前确保表里是个人的数据 | 数据太大会造成页面卡死 | 山东泰山是冠军！</div>
+        </div>
+
+        <div class="filter-panel">
+            <div class="filter-title">
+                <span>🔎 多字段筛选</span>
+                <div class="filter-mode-buttons">
+                    <button class="mode-btn" id="fuzzyModeBtn" data-mode="fuzzy">🔍 模糊筛选（包含）</button>
+                    <button class="mode-btn" id="exactModeBtn" data-mode="exact">🎯 精准筛选（完全匹配）</button>
+                </div>
+            </div>
+            <div class="filter-grid" id="filterGrid"></div>
+            <div class="filter-actions">
+                <button class="btn-filter" id="applyFilterBtn">应用筛选</button>
+                <button class="btn-filter btn-reset" id="resetFilterBtn">重置</button>
+            </div>
+        </div>
+
+        <div class="column-control">
+            <label>📐 每行显示数量：</label>
+            <input type="number" id="columnsPerRow" min="1" max="6" value="2" step="1">
+            <span>（最多可展示6列，飞哥建议展示4列，因为好看）</span>
+        </div>
+
+        <div class="main-layout">
+            <div class="content-area">
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+            <div class="settings-panel">
+                <div class="settings-title">⚙️ 展示字段设置</div>
+                <div id="fieldCheckboxes" class="setting-group"></div>
+                <button class="btn-reset-settings" id="resetSettingsBtn">重置全部勾选</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customProductArea" style="display: none;">
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <label class="upload-label" for="customExcelUpload">📂 上传定制原服/原鞋 Excel</label>
+                <input type="file" id="customExcelUpload" accept=".xlsx, .xls" style="display:none;">
+                <span style="font-size:0.7rem; color:#6c7a91;">显示字段：ID、货号、标题、类目、品牌、外网链接、系列名称、商品首图</span>
+            </div>
+            <div class="toolbar-right">
+                <div class="filter-badge" id="customCountBadge">0 条数据</div>
+            </div>
+        </div>
+        <div class="column-control">
+            <label>📐 每行显示数量：</label>
+            <input type="number" id="customColumnsPerRow" min="1" max="6" value="3" step="1">
+            <span>（1-6列）</span>
+        </div>
+        <div class="products-grid" id="customProductsGrid"></div>
+    </div>
+</div>
+
+<div id="ruleModal" class="modal-mask" style="display: none;">
+    <div class="modal-container" style="max-width: 750px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 id="ruleModalTitle">添加自定义联动规则</h3>
+            <span onclick="closeRuleModal()" style="cursor: pointer;">&times;</span>
+        </div>
+        <div class="trigger-group"><div class="group-header">📌 当满足以下【全部】条件时：</div><div id="triggerConditionsContainer"></div><button type="button" class="add-cond-btn" onclick="addTriggerCondition()">+ 添加触发条件（且）</button></div>
+        <div class="exclude-group"><div class="group-header">⛔ 但如果满足以下【任一】条件，则不检查本规则：</div><div id="excludeConditionsContainer"></div><button type="button" class="add-cond-btn" onclick="addExcludeCondition()">+ 添加排除条件（或）</button></div>
+        <div class="checks-group"><div class="group-header">🎯 则必须满足以下【任一】检查条件：</div><div id="checkConditionsContainer"></div><button type="button" class="add-cond-btn" onclick="addCheckCondition()">+ 添加检查条件（或）</button></div>
+        <div class="info-row" style="margin-top: 12px;"><label style="min-width: 80px;">错误提示：</label><input type="text" id="ruleErrorMsg" placeholder="自定义错误信息（必填！不填无对应提示！！）" style="flex:1; padding: 6px; border-radius: 20px;"></div>
+        <button class="btn-filter" id="saveRuleBtn" onclick="addQualityRule()" style="margin-top: 12px; width: 100%;">保存规则</button>
+    </div>
+</div>
+
+<div class="go-top" id="goTopBtn">↑</div>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script>
+    // ========== 全局变量 ==========
+    let currentProducts = [];
+    let rawData = [];
+    let qualityRules = [];
+    let displayConfig = {};
+    let showOnlyErrors = false;
+    let selfCheckStatus = {};
+    let filterMode = 'fuzzy';
+    let editingRuleIndex = null;
+    let currentTriggerConditions = [];
+    let currentExcludeConditions = [];
+    let currentCheckConditions = [];
+    
+    let customRawData = [];
+    let customCurrentProducts = [];
+    let customMatchMap = new Map();
+    
+    let currentPage = 'productQc';
+    let pageState = { productQc: { scrollTop: 0 }, custom: { scrollTop: 0 } };
+    let strictEqualMode = false;
+    let whiteBgCheckEnabled = true;  // 白底图检测开关，默认开启
+    
+    const filterFields = ['货号','品牌名称','一级类目名称','二级类目名称','三级类目名称','商品名称','商品来源名称','创建者','上线人员','适用人群','商品系列名称','联名品牌'];
+    let filterValues = {};
+    filterFields.forEach(f => filterValues[f] = '');
+    
+    const allFields = ['货号','品牌名称','一级类目名称','二级类目名称','三级类目名称','商品名称','商品来源名称','创建者','上线人员','适用人群','商品系列名称','联名品牌','属性','外网链接'];
+    allFields.forEach(f => displayConfig[f] = true);
+    
+    const SPU_DETAIL_URL = 'https://gondor.shizhuang-inc.com/main/product/spuAdmin/list?spuId=';
+    
+    function jumpToSpuDetail(spuId) { if (spuId && spuId !== '—' && spuId !== '') window.open(SPU_DETAIL_URL + spuId, '_blank'); }
+    
+    function cleanSkuForMatch(sku) {
+        if (!sku) return '';
+        let str = String(sku);
+        str = str.replace(/\([^)]*\)/g, '').replace(/（[^）]*）/g, '');
+        return str.trim();
+    }
+    
+    // ========== 成分含量检测：只检测"成分含量"键，按百分比顺序每100%一组 ==========
+    function checkCompositionField(attrObj) {
+        if (!attrObj || typeof attrObj !== 'object') return [];
+        
+        const compositionValue = attrObj['成分含量'];
+        if (!compositionValue || typeof compositionValue !== 'string') return [];
+        
+        const str = compositionValue;
+        
+        const percentPattern = /(\d+(?:\.\d+)?)%/g;
+        const percentList = [];
+        let match;
+        while ((match = percentPattern.exec(str)) !== null) {
+            percentList.push({
+                value: parseFloat(match[1]),
+                position: match.index,
+                fullMatch: match[0]
+            });
+        }
+        
+        if (percentList.length < 2) return [];
+        
+        const groups = [];
+        let currentGroupIndices = [];
+        let currentSum = 0;
+        
+        for (let i = 0; i < percentList.length; i++) {
+            const p = percentList[i];
+            currentGroupIndices.push(i);
+            currentSum += p.value;
+            
+            if (Math.abs(currentSum - 100) < 0.0001) {
+                groups.push([...currentGroupIndices]);
+                currentGroupIndices = [];
+                currentSum = 0;
+            } else if (currentSum > 100.0001) {
+                return [`成分含量：百分比累加超过100%（当前累加=${currentSum.toFixed(2)}%），请检查数据格式`];
+            }
+        }
+        
+        if (currentGroupIndices.length > 0 && currentSum > 0) {
+            return [`成分含量：百分比累加不足100%（剩余=${currentSum.toFixed(2)}%），请检查数据格式`];
+        }
+        
+        const errors = [];
+        
+        for (let gIdx = 0; gIdx < groups.length; gIdx++) {
+            const groupIndices = groups[gIdx];
+            if (groupIndices.length < 2) continue;
+            
+            const firstPercent = percentList[groupIndices[0]];
+            const lastPercent = percentList[groupIndices[groupIndices.length - 1]];
+            const startPos = firstPercent.position;
+            const endPos = lastPercent.position + lastPercent.fullMatch.length;
+            const groupText = str.substring(startPos, endPos);
+            
+            const items = [];
+            
+            const pattern1 = /([\u4e00-\u9fa5a-zA-Z\s·（）()]+?)(\d+(?:\.\d+)?%)/g;
+            let m;
+            while ((m = pattern1.exec(groupText)) !== null) {
+                let material = m[1].trim();
+                let percentStr = m[2];
+                let percent = parseFloat(percentStr);
+                const isInGroup = groupIndices.some(idx => Math.abs(percentList[idx].value - percent) < 0.0001);
+                if (material && material.length > 0 && material !== '：' && material !== ':' && isInGroup) {
+                    items.push({ material, percent, percentStr, order: m.index });
+                }
+            }
+            
+            if (items.length === 0) {
+                const pattern2 = /(\d+(?:\.\d+)?%)([\u4e00-\u9fa5a-zA-Z\s·（）()]+)/g;
+                while ((m = pattern2.exec(groupText)) !== null) {
+                    let percentStr = m[1];
+                    let material = m[2].trim();
+                    let percent = parseFloat(percentStr);
+                    const isInGroup = groupIndices.some(idx => Math.abs(percentList[idx].value - percent) < 0.0001);
+                    if (material && material.length > 0 && material !== '：' && material !== ':' && isInGroup) {
+                        items.push({ material, percent, percentStr, order: m.index });
+                    }
+                }
+            }
+            
+            if (items.length < 2) continue;
+            
+            items.sort((a, b) => a.order - b.order);
+            
+            let isDescending = true;
+            let errorIdx = -1;
+            for (let i = 0; i < items.length - 1; i++) {
+                if (items[i].percent < items[i+1].percent) {
+                    isDescending = false;
+                    errorIdx = i;
+                    break;
+                }
+            }
+            
+            if (!isDescending) {
+                const orderStr = items.map(item => `${item.material}${item.percentStr}`).join(' → ');
+                errors.push(`成分含量第${gIdx+1}组：${orderStr}，应${items[errorIdx].percent}% ≥ ${items[errorIdx+1].percent}%`);
+            }
+        }
+        
+        return errors;
+    }
+    
+    // ========== 白底图检测 ==========
+    function checkWhiteBackground(imageUrl) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                
+                const cornerSize = 10;
+                const corners = [
+                    { name: '左上角', x: 0, y: 0 },
+                    { name: '右上角', x: img.width - cornerSize, y: 0 },
+                    { name: '左下角', x: 0, y: img.height - cornerSize },
+                    { name: '右下角', x: img.width - cornerSize, y: img.height - cornerSize }
+                ];
+                
+                const failedCorners = [];
+                
+                for (let corner of corners) {
+                    let allWhite = true;
+                    for (let dx = 0; dx < cornerSize; dx++) {
+                        for (let dy = 0; dy < cornerSize; dy++) {
+                            const x = corner.x + dx;
+                            const y = corner.y + dy;
+                            if (x < img.width && y < img.height) {
+                                const pixel = ctx.getImageData(x, y, 1, 1).data;
+                                const r = pixel[0];
+                                const g = pixel[1];
+                                const b = pixel[2];
+                                if (r !== 255 || g !== 255 || b !== 255) {
+                                    allWhite = false;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!allWhite) break;
+                    }
+                    if (!allWhite) {
+                        failedCorners.push(corner.name);
+                    }
+                }
+                
+                if (failedCorners.length > 0) {
+                    resolve(`图片四角检测：${failedCorners.join('、')}不是纯白色(#FFFFFF)`);
+                } else {
+                    resolve(null);
+                }
+            };
+            img.onerror = () => {
+                resolve(`图片加载失败，无法检测白底`);
+            };
+            img.src = imageUrl;
+        });
+    }
+    
+    // ========== 尺码表顺序检测 ==========
+    function parseSizeValue(valStr) {
+        if (!valStr || valStr === '-' || valStr === '—') return null;
+        const str = String(valStr).trim();
+        const rangeMatch = str.match(/(\d+(?:\.\d+)?)\s*[-~～]\s*(\d+(?:\.\d+)?)/);
+        if (rangeMatch) {
+            const min = parseFloat(rangeMatch[1]);
+            const max = parseFloat(rangeMatch[2]);
+            if (!isNaN(min) && !isNaN(max)) {
+                return { min: Math.min(min, max), max: Math.max(min, max) };
+            }
+        }
+        const numMatch = str.match(/(\d+(?:\.\d+)?)/);
+        if (numMatch) {
+            const val = parseFloat(numMatch[1]);
+            return { min: val, max: val };
+        }
+        return null;
+    }
+
+    function isValueIncreasing(prevValStr, nextValStr) {
+        const prev = parseSizeValue(prevValStr);
+        const next = parseSizeValue(nextValStr);
+        if (!prev || !next) return true;
+        if (strictEqualMode) {
+            return next.min > prev.min && next.max > prev.max;
+        } else {
+            return next.min >= prev.min && next.max >= prev.max;
+        }
+    }
+
+    function checkSizeTableOrderFromJson(sizeJsonArray) {
+        if (!sizeJsonArray || !Array.isArray(sizeJsonArray) || sizeJsonArray.length === 0) return null;
+        
+        const errors = [];
+        const type1Items = sizeJsonArray.filter(i => i.type === 1).sort((a,b) => (a.sort||0) - (b.sort||0));
+        const type2Items = sizeJsonArray.filter(i => i.type === 2).sort((a,b) => (a.sort||0) - (b.sort||0));
+        const allItems = [...type1Items, ...type2Items];
+        if (allItems.length === 0) return null;
+        
+        const sizeKeys = new Set();
+        const keyValuesMap = new Map();
+        for (let item of allItems) {
+            if (item.size_key && item.size_value !== undefined) {
+                sizeKeys.add(item.size_key);
+                const values = String(item.size_value).split(',');
+                keyValuesMap.set(item.size_key, values);
+            }
+        }
+        if (sizeKeys.size === 0) return null;
+        
+        let maxRows = 0;
+        for (let [_, values] of keyValuesMap) {
+            if (values.length > maxRows) maxRows = values.length;
+        }
+        if (maxRows < 2) return null;
+        
+        const sizeLabelRow = [];
+        for (let i = 0; i < maxRows; i++) {
+            let label = `第${i+1}行`;
+            for (let [key, values] of keyValuesMap) {
+                if (key.includes('尺码') || key === '尺码' || key === 'size' || key === 'Size') {
+                    if (values[i] && values[i].trim()) {
+                        label = values[i].trim();
+                        break;
+                    }
+                }
+            }
+            sizeLabelRow.push(label);
+        }
+        
+        for (let [key, values] of keyValuesMap) {
+            if (key.includes('尺码') || key === '尺码' || key === 'size' || key === 'Size') continue;
+            
+            const validRows = [];
+            for (let i = 0; i < values.length; i++) {
+                const parsed = parseSizeValue(values[i]);
+                if (parsed !== null) {
+                    validRows.push({ index: i, rawValue: values[i], parsed });
+                }
+            }
+            if (validRows.length < 2) continue;
+            
+            for (let idx = 0; idx < validRows.length - 1; idx++) {
+                const current = validRows[idx];
+                const next = validRows[idx + 1];
+                if (!isValueIncreasing(current.rawValue, next.rawValue)) {
+                    const currentLabel = sizeLabelRow[current.index] || `行${current.index+1}`;
+                    const nextLabel = sizeLabelRow[next.index] || `行${next.index+1}`;
+                    errors.push(`📏 尺码表「${key}」顺序错误：${currentLabel}=${current.rawValue}，下一个${nextLabel}=${next.rawValue}`);
+                }
+            }
+        }
+        return errors.length > 0 ? errors : null;
+    }
+    
+    function buildCustomMatchMap() {
+        customMatchMap.clear();
+        for (let item of customCurrentProducts) {
+            const originalSku = item.货号;
+            if (originalSku && originalSku !== '—') {
+                customMatchMap.set(originalSku, {
+                    customId: item.商品id,
+                    seriesName: item.系列名称 || ''
+                });
+            }
+        }
+        if (rawData.length) renderProducts(getDisplayProducts());
+    }
+    
+    function switchToProductQc() {
+        savePageState();
+        currentPage = 'productQc';
+        document.getElementById('productsArea').style.display = 'block';
+        document.getElementById('customProductArea').style.display = 'none';
+        document.getElementById('tabProductQc').classList.add('active');
+        document.getElementById('tabCustomProduct').classList.remove('active');
+        updateGridColumns();
+        restorePageState();
+        if (rawData.length) renderProducts(getDisplayProducts());
+    }
+    
+    function switchToCustom() {
+        savePageState();
+        currentPage = 'custom';
+        document.getElementById('productsArea').style.display = 'none';
+        document.getElementById('customProductArea').style.display = 'block';
+        document.getElementById('tabProductQc').classList.remove('active');
+        document.getElementById('tabCustomProduct').classList.add('active');
+        updateCustomGridColumns();
+        restorePageState();
+        renderCustomProducts();
+    }
+    
+    function updateGridColumns() {
+        const cols = Math.min(6, Math.max(1, parseInt(document.getElementById('columnsPerRow').value) || 2));
+        const pg = document.getElementById('productsGrid');
+        if (pg) pg.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+    }
+    function updateCustomGridColumns() {
+        const cols = Math.min(6, Math.max(1, parseInt(document.getElementById('customColumnsPerRow').value) || 3));
+        const cg = document.getElementById('customProductsGrid');
+        if (cg) cg.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+    }
+    
+    function savePageState() { pageState[currentPage].scrollTop = window.scrollY; }
+    function restorePageState() { setTimeout(() => { if (pageState[currentPage].scrollTop) window.scrollTo(0, pageState[currentPage].scrollTop); }, 50); }
+    
+    function showMessageModal(message, isError) {
+        const modalDiv = document.createElement('div');
+        modalDiv.className = 'modal-mask';
+        modalDiv.innerHTML = `<div class="modal-container" style="max-width: 400px; text-align: center;">
+            <div style="margin-bottom: 1rem;"><span style="font-size: 3rem;">${isError ? '😅' : '🎉'}</span></div>
+            <div style="font-size: 1rem; margin-bottom: 1.5rem; color: ${isError ? '#dc2626' : '#16a34a'};">${escapeHtml(message)}</div>
+            <button class="btn-filter" onclick="this.closest('.modal-mask').remove()" style="padding: 8px 24px;">确定</button>
+        </div>`;
+        document.body.appendChild(modalDiv);
+    }
+    
+    const grid = document.getElementById('productsGrid');
+    const fileInput = document.getElementById('excelUpload');
+    const applyBtn = document.getElementById('applyFilterBtn');
+    const resetBtn = document.getElementById('resetFilterBtn');
+    const resetSettingsBtn = document.getElementById('resetSettingsBtn');
+    const exportRulesBtn = document.getElementById('exportRulesBtn');
+    const importRulesInput = document.getElementById('importRulesInput');
+    const showOnlyErrorsBtn = document.getElementById('showOnlyErrorsBtn');
+    const showAllBtn = document.getElementById('showAllBtn');
+    const filterBadge = document.getElementById('filterBadge');
+    const exportSelfCheckBtn = document.getElementById('exportSelfCheckBtn');
+    const goTopBtn = document.getElementById('goTopBtn');
+    const columnsInput = document.getElementById('columnsPerRow');
+    const fuzzyModeBtn = document.getElementById('fuzzyModeBtn');
+    const exactModeBtn = document.getElementById('exactModeBtn');
+    const tabProductQc = document.getElementById('tabProductQc');
+    const tabCustomProduct = document.getElementById('tabCustomProduct');
+    const customExcelUpload = document.getElementById('customExcelUpload');
+    const customColumnsInput = document.getElementById('customColumnsPerRow');
+    const customCountBadge = document.getElementById('customCountBadge');
+    const strictEqualCheckbox = document.getElementById('strictEqualCheckbox');
+    const whiteBgCheckbox = document.getElementById('whiteBgCheckbox');
+    
+    if (tabProductQc) tabProductQc.addEventListener('click', switchToProductQc);
+    if (tabCustomProduct) tabCustomProduct.addEventListener('click', switchToCustom);
+    if (columnsInput) { columnsInput.addEventListener('change', updateGridColumns); columnsInput.addEventListener('input', updateGridColumns); }
+    if (customColumnsInput) { customColumnsInput.addEventListener('change', updateCustomGridColumns); customColumnsInput.addEventListener('input', updateCustomGridColumns); }
+    if (fuzzyModeBtn) fuzzyModeBtn.addEventListener('click', () => { filterMode = 'fuzzy'; fuzzyModeBtn.classList.add('active'); exactModeBtn.classList.remove('active'); applyFilters(); });
+    if (exactModeBtn) exactModeBtn.addEventListener('click', () => { filterMode = 'exact'; exactModeBtn.classList.add('active'); fuzzyModeBtn.classList.remove('active'); applyFilters(); });
+    
+    // 尺码表严格模式开关
+    if (strictEqualCheckbox) { 
+        strictEqualCheckbox.addEventListener('change', (e) => { 
+            strictEqualMode = e.target.checked; 
+            if (rawData.length) performQualityCheckOnAllProducts(); 
+        }); 
+    }
+    
+    // 白底图检测开关
+    if (whiteBgCheckbox) {
+        whiteBgCheckbox.addEventListener('change', (e) => {
+            whiteBgCheckEnabled = e.target.checked;
+            if (rawData.length) performQualityCheckOnAllProducts();
+        });
+    }
+    
+    window.addEventListener('scroll', () => { pageState[currentPage].scrollTop = window.scrollY; goTopBtn.classList.toggle('show', window.scrollY > 300); });
+    goTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    
+    function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    function getFieldLabel(field) {
+        const map = { '货号':'📌 货号', '品牌名称':'🏷️ 品牌', '一级类目名称':'📂 一级类目', '二级类目名称':'📂 二级类目', '三级类目名称':'📂 三级类目', '商品名称':'🏷️ 商品名称', '商品来源名称':'📂 来源', '创建者':'👤 创建者', '上线人员':'👥 上线人员', '适用人群':'👥 适用人群', '商品系列名称':'🏷️ 系列', '联名品牌':'🤝 联名', '属性':'📦 属性', '外网链接':'🌐 外网链接' };
+        return map[field] || field;
+    }
+    function isValidHttpUrl(urlString) { if (!urlString || urlString === '-') return false; try { new URL(urlString); return true; } catch { return false; } }
+    function parseImageUrls(urlStr) { if (!urlStr) return []; if (Array.isArray(urlStr)) return urlStr.filter(u => u && String(u).startsWith('http')); let str = String(urlStr); if (str.includes(',')) return str.split(',').map(s => s.trim()).filter(s => s.startsWith('http')); return str.startsWith('http') ? [str] : []; }
+    function showModal(title, htmlContent) { const modalDiv = document.createElement('div'); modalDiv.className = 'modal-mask'; modalDiv.innerHTML = `<div class="modal-container"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700;">${escapeHtml(title)}</span><span style="cursor:pointer;" onclick="this.closest('.modal-mask').remove()">&times;</span></div><div style="margin-top:10px;">${htmlContent}</div></div>`; document.body.appendChild(modalDiv); }
+    
+    function rebuildSizeChart(d) { if(!d?.length) return null; let t1=d.filter(i=>i.type===1).sort((a,b)=>(a.sort||0)-(b.sort||0)), t2=d.filter(i=>i.type===2).sort((a,b)=>(a.sort||0)-(b.sort||0)); let hs=new Set(), dm=new Map(); for(let i of [...t1,...t2]) if(i.size_key&&i.size_value!==undefined){let v=String(i.size_value).split(','); hs.add(i.size_key); dm.set(i.size_key,v);} if(hs.size===0) return null; let hd=Array.from(hs), mr=0; for(let h of hd){let v=dm.get(h); if(v&&v.length>mr) mr=v.length;} if(mr===0) return null; let rows=[]; for(let i=0;i<mr;i++){let row={}; for(let h of hd){let v=dm.get(h); row[h]=v&&i<v.length?v[i]:'';} rows.push(row);} return rows; }
+    function rebuildSizeRecommend(d) { let hi=d?.find(i=>i.size_key&&(i.size_key==='身高cm'||i.size_key==='身高'||i.size_key.includes('身高'))); if(!hi) return null; let hr=String(hi.size_value).split(','), wi=d.filter(i=>i.size_key&&/^\d/.test(i.size_key)&&i.size_key.includes('-')).sort((a,b)=>parseInt(a.size_key.split('-')[0])-parseInt(b.size_key.split('-')[0])); if(wi.length===0) return null; let rows=[]; for(let i=0;i<hr.length;i++){let row={'身高/cm':hr[i]}; for(let w of wi){let v=String(w.size_value).split(','); row[w.size_key]=i<v.length&&v[i]&&v[i]!=='/'?v[i]:'';} rows.push(row);} return rows; }
+    function rebuildTrialReport(d) { let f=['试穿者','身高cm','体重kg','性别','试穿尺码','试穿体验'], dm=new Map(); for(let ff of f){let it=d?.find(i=>i.size_key===ff); if(it) dm.set(ff,String(it.size_value).split(','));} if(dm.size===0) return null; let mr=Math.max(...Array.from(dm.values()).map(v=>v.length),0); if(mr===0) return null; let rows=[]; for(let i=0;i<mr;i++){let row={}; for(let ff of f){let v=dm.get(ff); row[ff]=v&&i<v.length?v[i]:'';} rows.push(row);} return rows; }
+    function buildTableFromRows(rows) { if(!rows||rows.length===0) return '<div>暂无数据</div>'; let ks=new Set(); for(let r of rows) Object.keys(r).forEach(k=>ks.add(k)); let hd=Array.from(ks); let th='<thead></tr>'+hd.map(h=>`<th>${escapeHtml(h)}</th>`).join('')+'</tr></thead>', tb='<tbody>'; for(let r of rows){tb+='<tr>'; for(let h of hd) tb+=`<td>${escapeHtml(r[h]||'')}</td>`; tb+='</tr>';} tb+='</tbody>'; return `<table class="size-table">${th}${tb}<\/table>`; }
+    function extractSizeTables(row) { 
+        let r={sizeChartHtml:'<div>暂无尺码表数据</div>',trialReportHtml:'<div>暂无试穿报告数据</div>',sizeRecommendHtml:'<div>暂无尺码推荐数据</div>'}; 
+        const det=row['尺码推荐表明细信息json']; 
+        let arr=[]; 
+        if(det) try{let d=typeof det==='string'?JSON.parse(det):det; arr=Array.isArray(d)?d:[d];}catch(e){} 
+        if(arr.length){
+            r._rawSizeJson = arr;
+            let ch=rebuildSizeChart(arr); 
+            if(ch&&ch.length) r.sizeChartHtml=buildTableFromRows(ch); 
+            let rec=rebuildSizeRecommend(arr); 
+            if(rec&&rec.length) r.sizeRecommendHtml=buildTableFromRows(rec); 
+            let tr=rebuildTrialReport(arr); 
+            if(tr&&tr.length) r.trialReportHtml=buildTableFromRows(tr);
+        } 
+        return r; 
+    }
+    function renderAttributes(attr) { if(!attr||typeof attr!=='object') return '<div class="attr-block">— 无属性数据 —</div>'; let l=''; for(let [k,v] of Object.entries(attr)) l+=`<div class="attr-line"><span class="attr-key">${escapeHtml(k)}：</span>${escapeHtml(String(v))}</div>`; return `<div class="attr-block">${l}</div>`; }
+    function getFieldValue(p,f,ak=null) { if(f==='属性.自定义') return p.属性?.[ak]||''; return p[f]!==undefined&&p[f]!==null?p[f]:''; }
+    function checkSingleCondition(val,cond,exp) { let av=val===undefined||val===null?'':String(val), ex=exp||''; switch(cond){case'contains':return av.includes(ex); case'not_contains':return!av.includes(ex); case'equals':return av===ex; case'not_equals':return av!==ex; case'empty':return av===''||av==='—'; case'not_empty':return av!==''&&av!=='—'; case'greater_than':return parseFloat(val)>parseFloat(ex); case'less_than':return parseFloat(val)<parseFloat(ex); default:return true;} }
+    function checkDuplicateWords(name) { if(!name||name==='—') return null; let w=[]; let c=/[\u4e00-\u9fa5]{2,}/g,m; while((m=c.exec(name))!==null) w.push(m[0]); let e=/[a-zA-Z]+/g; while((m=e.exec(name))!==null) w.push(m[0].toLowerCase()); let n=/\d{2,}/g; while((m=n.exec(name))!==null) w.push(m[0]); let cnt={}; for(let t of w) cnt[t]=(cnt[t]||0)+1; let dup=[]; for(let [word,count] of Object.entries(cnt)) if(count>=2) dup.push(word); return dup.length?{hasDuplicate:true,duplicateWords:dup}:{hasDuplicate:false,duplicateWords:[]}; }
+    function loadQualityRules() { let s=localStorage.getItem('qualityRules_multi_trigger'); if(s) try{qualityRules=JSON.parse(s);}catch(e){qualityRules=[];} if(qualityRules.length===0) qualityRules=[{triggerConditions:[{field:'品牌名称',attrKey:null,condition:'equals',value:'露露'},{field:'属性.自定义',attrKey:'颜色',condition:'contains',value:'红色'}],excludeConditions:[],checkConditions:[{field:'属性.自定义',attrKey:'颜色',checkType:'must',condition:'contains',value:'red'}],errorMsg:'露露品牌的红色商品，颜色属性中必须包含"red"'}]; saveQualityRules(); }
+    function saveQualityRules() { localStorage.setItem('qualityRules_multi_trigger',JSON.stringify(qualityRules)); updateQualityUI(); if(rawData.length){performQualityCheckOnAllProducts();} }
+    function updateQualityUI() { let rd=document.getElementById('rulesList'); if(rd){ rd.innerHTML=qualityRules.map((r,i)=>{ let tt=r.triggerConditions.map(t=>{let d=t.field==='属性.自定义'?`属性.${t.attrKey}`:t.field; return `${d} ${getCondText(t.condition)} ${t.value||''}`;}).join(' 且 '); let et=r.excludeConditions&&r.excludeConditions.length?`<span style="background:#cffafe;padding:0 4px;border-radius:12px;">⛔ 除非 ${r.excludeConditions.map(e=>{let f=e.field==='属性.自定义'?`属性.${e.attrKey}`:e.field; return `${f} ${getCondText(e.condition)} ${e.value||''}`;}).join(' 或 ')}</span>`:''; let ct=r.checkConditions.map(c=>{let fd=c.field==='属性.自定义'?`属性.${c.attrKey}`:c.field; let tp=c.checkType==='must'?'必须':'禁止'; return `${tp} ${fd} ${getCondText(c.condition)} ${c.value||''}`;}).join(' 或 '); return `<div class="rule-item"><div>🔹 如果 ${escapeHtml(tt)} ${et}，则 ${escapeHtml(ct)}</div><div style="color:#dc2626;">⚠️ ${escapeHtml(r.errorMsg||'条件不满足')}</div><div class="rule-actions"><button class="edit-rule" onclick="editRule(${i})">✏️编辑规则</button><button class="copy-rule" onclick="copyRule(${i})">📋复制规则</button><button class="delete-rule" onclick="deleteRule(${i})">🗑️删除规则</button></div></div>`;}).join(''); } updateQualityStats(); }
+    function getCondText(c) { const m={contains:'包含',not_contains:'不包含',equals:'等于',not_equals:'不等于',empty:'为空',not_empty:'不为空',greater_than:'大于',less_than:'小于'}; return m[c]||c; }
+    function deleteRule(i) { if(confirm('确定删除？')){ qualityRules.splice(i,1); saveQualityRules(); } }
+    function editRule(i) { let r=qualityRules[i]; editingRuleIndex=i; currentTriggerConditions=JSON.parse(JSON.stringify(r.triggerConditions)); currentExcludeConditions=JSON.parse(JSON.stringify(r.excludeConditions||[])); currentCheckConditions=JSON.parse(JSON.stringify(r.checkConditions)); renderAllRuleConditions(); document.getElementById('ruleErrorMsg').value=r.errorMsg||''; document.getElementById('ruleModalTitle').innerText='编辑规则'; document.getElementById('ruleModal').style.display='flex'; }
+    function copyRule(i) { let r=JSON.parse(JSON.stringify(qualityRules[i])); if(r.errorMsg) r.errorMsg+=' (副本)'; else r.errorMsg='规则副本'; qualityRules.push(r); saveQualityRules(); showMessageModal('复制成功',false); }
+    
+    // ========== 统一渲染规则条件 ==========
+    function renderAllRuleConditions() {
+        renderTriggerConditionsUI();
+        renderExcludeConditionsUI();
+        renderCheckConditionsUI();
+    }
+    
+    function renderTriggerConditionsUI() { 
+        let cont = document.getElementById('triggerConditionsContainer'); 
+        if (!cont) return; 
+        
+        cont.innerHTML = currentTriggerConditions.map((c, i) => `
+            <div class="condition-item" data-trigger-idx="${i}">
+                <select class="tf" data-idx="${i}" style="min-width:100px;">
+                    <option value="品牌名称" ${c.field === '品牌名称' ? 'selected' : ''}>品牌名称</option>
+                    <option value="一级类目名称" ${c.field === '一级类目名称' ? 'selected' : ''}>一级类目</option>
+                    <option value="二级类目名称" ${c.field === '二级类目名称' ? 'selected' : ''}>二级类目</option>
+                    <option value="三级类目名称" ${c.field === '三级类目名称' ? 'selected' : ''}>三级类目</option>
+                    <option value="商品名称" ${c.field === '商品名称' ? 'selected' : ''}>商品名称</option>
+                    <option value="货号" ${c.field === '货号' ? 'selected' : ''}>货号</option>
+                    <option value="适用人群" ${c.field === '适用人群' ? 'selected' : ''}>适用人群</option>
+                    <option value="商品系列名称" ${c.field === '商品系列名称' ? 'selected' : ''}>系列名称</option>
+                    <option value="联名品牌" ${c.field === '联名品牌' ? 'selected' : ''}>联名品牌</option>
+                    <option value="属性.自定义" ${c.field === '属性.自定义' ? 'selected' : ''}>属性中的键</option>
+                </select>
+                <input type="text" class="t-ak" data-idx="${i}" placeholder="键名" style="width:70px; ${c.field !== '属性.自定义' ? 'display:none' : ''}" value="${c.attrKey || ''}">
+                <select class="tc" data-idx="${i}" style="min-width:70px;">
+                    <option value="equals" ${c.condition === 'equals' ? 'selected' : ''}>等于</option>
+                    <option value="contains" ${c.condition === 'contains' ? 'selected' : ''}>包含</option>
+                    <option value="not_contains" ${c.condition === 'not_contains' ? 'selected' : ''}>不包含</option>
+                    <option value="not_equals" ${c.condition === 'not_equals' ? 'selected' : ''}>不等于</option>
+                    <option value="empty" ${c.condition === 'empty' ? 'selected' : ''}>为空</option>
+                    <option value="not_empty" ${c.condition === 'not_empty' ? 'selected' : ''}>不为空</option>
+                </select>
+                <input type="text" class="tv" data-idx="${i}" placeholder="值" style="flex:1;" value="${c.value || ''}">
+                ${currentTriggerConditions.length > 1 ? `<button class="remove-cond-btn" onclick="removeTriggerCondition(${i})">删</button>` : ''}
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.tf').forEach(sel => {
+            sel.removeEventListener('change', handleTriggerFieldChange);
+            sel.addEventListener('change', handleTriggerFieldChange);
+        });
+        document.querySelectorAll('.tc').forEach(sel => {
+            sel.removeEventListener('change', handleTriggerConditionChange);
+            sel.addEventListener('change', handleTriggerConditionChange);
+        });
+        document.querySelectorAll('.tv').forEach(inp => {
+            inp.removeEventListener('input', handleTriggerValueInput);
+            inp.addEventListener('input', handleTriggerValueInput);
+        });
+        document.querySelectorAll('.t-ak').forEach(inp => {
+            inp.removeEventListener('input', handleTriggerAttrKeyInput);
+            inp.addEventListener('input', handleTriggerAttrKeyInput);
+        });
+    }
+    
+    function handleTriggerFieldChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentTriggerConditions[idx].field = e.target.value;
+        renderTriggerConditionsUI();
+    }
+    function handleTriggerConditionChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentTriggerConditions[idx].condition = e.target.value;
+        renderTriggerConditionsUI();
+    }
+    function handleTriggerValueInput(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentTriggerConditions[idx].value = e.target.value;
+    }
+    function handleTriggerAttrKeyInput(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentTriggerConditions[idx].attrKey = e.target.value;
+    }
+    
+    function addTriggerCondition() { 
+        currentTriggerConditions.push({field:'品牌名称', attrKey:null, condition:'equals', value:''}); 
+        renderTriggerConditionsUI(); 
+    }
+    function removeTriggerCondition(idx) { 
+        currentTriggerConditions.splice(idx,1); 
+        renderTriggerConditionsUI(); 
+    }
+    
+    // ========== 排除条件渲染 ==========
+    function renderExcludeConditionsUI() { 
+        let cont = document.getElementById('excludeConditionsContainer'); 
+        if (!cont) return; 
+        
+        cont.innerHTML = currentExcludeConditions.map((c, i) => `
+            <div class="condition-item" data-exclude-idx="${i}">
+                <select class="ef" data-idx="${i}" style="min-width:100px;">
+                    <option value="商品名称" ${c.field === '商品名称' ? 'selected' : ''}>商品名称</option>
+                    <option value="品牌名称" ${c.field === '品牌名称' ? 'selected' : ''}>品牌名称</option>
+                    <option value="商品系列名称" ${c.field === '商品系列名称' ? 'selected' : ''}>系列名称</option>
+                    <option value="属性.自定义" ${c.field === '属性.自定义' ? 'selected' : ''}>属性中的键</option>
+                </select>
+                <input type="text" class="e-ak" data-idx="${i}" placeholder="键名" style="width:70px; ${c.field !== '属性.自定义' ? 'display:none' : ''}" value="${c.attrKey || ''}">
+                <select class="ec" data-idx="${i}" style="min-width:70px;">
+                    <option value="contains" ${c.condition === 'contains' ? 'selected' : ''}>包含</option>
+                    <option value="equals" ${c.condition === 'equals' ? 'selected' : ''}>等于</option>
+                </select>
+                <input type="text" class="ev" data-idx="${i}" placeholder="值" style="flex:1;" value="${c.value || ''}">
+                <button class="remove-cond-btn" onclick="removeExcludeCondition(${i})">删</button>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.ef').forEach(sel => {
+            sel.removeEventListener('change', handleExcludeFieldChange);
+            sel.addEventListener('change', handleExcludeFieldChange);
+        });
+        document.querySelectorAll('.ec').forEach(sel => {
+            sel.removeEventListener('change', handleExcludeConditionChange);
+            sel.addEventListener('change', handleExcludeConditionChange);
+        });
+        document.querySelectorAll('.ev').forEach(inp => {
+            inp.removeEventListener('input', handleExcludeValueInput);
+            inp.addEventListener('input', handleExcludeValueInput);
+        });
+        document.querySelectorAll('.e-ak').forEach(inp => {
+            inp.removeEventListener('input', handleExcludeAttrKeyInput);
+            inp.addEventListener('input', handleExcludeAttrKeyInput);
+        });
+    }
+    
+    function handleExcludeFieldChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentExcludeConditions[idx].field = e.target.value;
+        renderExcludeConditionsUI();
+    }
+    function handleExcludeConditionChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentExcludeConditions[idx].condition = e.target.value;
+    }
+    function handleExcludeValueInput(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentExcludeConditions[idx].value = e.target.value;
+    }
+    function handleExcludeAttrKeyInput(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentExcludeConditions[idx].attrKey = e.target.value;
+    }
+    
+    function addExcludeCondition() { 
+        currentExcludeConditions.push({field:'商品名称', attrKey:null, condition:'contains', value:''}); 
+        renderExcludeConditionsUI(); 
+    }
+    function removeExcludeCondition(idx) { 
+        currentExcludeConditions.splice(idx,1); 
+        renderExcludeConditionsUI(); 
+    }
+    
+    // ========== 检查条件渲染 ==========
+    function renderCheckConditionsUI() { 
+        let cont = document.getElementById('checkConditionsContainer'); 
+        if (!cont) return; 
+        
+        cont.innerHTML = currentCheckConditions.map((c, i) => `
+            <div class="condition-item" data-check-idx="${i}">
+                <select class="cf" data-idx="${i}" style="min-width:100px;">
+                    <option value="商品名称" ${c.field === '商品名称' ? 'selected' : ''}>商品名称</option>
+                    <option value="适用人群" ${c.field === '适用人群' ? 'selected' : ''}>适用人群</option>
+                    <option value="品牌名称" ${c.field === '品牌名称' ? 'selected' : ''}>品牌名称</option>
+                    <option value="属性.自定义" ${c.field === '属性.自定义' ? 'selected' : ''}>属性中的键</option>
+                </select>
+                <input type="text" class="c-ak" data-idx="${i}" placeholder="键名" style="width:70px; ${c.field !== '属性.自定义' ? 'display:none' : ''}" value="${c.attrKey || ''}">
+                <select class="ctp" data-idx="${i}" style="min-width:60px;">
+                    <option value="must" ${c.checkType === 'must' ? 'selected' : ''}>必须</option>
+                    <option value="forbidden" ${c.checkType === 'forbidden' ? 'selected' : ''}>禁止</option>
+                </select>
+                <select class="cc" data-idx="${i}" style="min-width:70px;">
+                    <option value="contains" ${c.condition === 'contains' ? 'selected' : ''}>包含</option>
+                    <option value="equals" ${c.condition === 'equals' ? 'selected' : ''}>等于</option>
+                    <option value="not_contains" ${c.condition === 'not_contains' ? 'selected' : ''}>不包含</option>
+                    <option value="not_equals" ${c.condition === 'not_equals' ? 'selected' : ''}>不等于</option>
+                </select>
+                <input type="text" class="cv" data-idx="${i}" placeholder="值" style="flex:1;" value="${c.value || ''}">
+                ${currentCheckConditions.length > 1 ? `<button class="remove-cond-btn" onclick="removeCheckCondition(${i})">删</button>` : ''}
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.cf').forEach(sel => {
+            sel.removeEventListener('change', handleCheckFieldChange);
+            sel.addEventListener('change', handleCheckFieldChange);
+        });
+        document.querySelectorAll('.ctp').forEach(sel => {
+            sel.removeEventListener('change', handleCheckTypeChange);
+            sel.addEventListener('change', handleCheckTypeChange);
+        });
+        document.querySelectorAll('.cc').forEach(sel => {
+            sel.removeEventListener('change', handleCheckConditionChange);
+            sel.addEventListener('change', handleCheckConditionChange);
+        });
+        document.querySelectorAll('.cv').forEach(inp => {
+            inp.removeEventListener('input', handleCheckValueInput);
+            inp.addEventListener('input', handleCheckValueInput);
+        });
+        document.querySelectorAll('.c-ak').forEach(inp => {
+            inp.removeEventListener('input', handleCheckAttrKeyInput);
+            inp.addEventListener('input', handleCheckAttrKeyInput);
+        });
+    }
+    
+    function handleCheckFieldChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentCheckConditions[idx].field = e.target.value;
+        renderCheckConditionsUI();
+    }
+    function handleCheckTypeChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentCheckConditions[idx].checkType = e.target.value;
+    }
+    function handleCheckConditionChange(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentCheckConditions[idx].condition = e.target.value;
+    }
+    function handleCheckValueInput(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentCheckConditions[idx].value = e.target.value;
+    }
+    function handleCheckAttrKeyInput(e) {
+        let idx = parseInt(e.target.dataset.idx);
+        currentCheckConditions[idx].attrKey = e.target.value;
+    }
+    
+    function addCheckCondition() { 
+        currentCheckConditions.push({field:'商品名称', attrKey:null, checkType:'forbidden', condition:'contains', value:''}); 
+        renderCheckConditionsUI(); 
+    }
+    function removeCheckCondition(idx) { 
+        currentCheckConditions.splice(idx,1); 
+        renderCheckConditionsUI(); 
+    }
+    
+    function closeRuleModal() { document.getElementById('ruleModal').style.display='none'; }
+    function addQualityRule() { 
+        let tc=[]; 
+        for(let c of currentTriggerConditions){ 
+            if(c.field==='属性.自定义'&&!c.attrKey){alert('请填写属性键名');return;} 
+            if(c.condition!=='empty'&&c.condition!=='not_empty'&&!c.value){alert('请填写触发值');return;} 
+            tc.push({field:c.field,attrKey:c.field==='属性.自定义'?c.attrKey:null,condition:c.condition,value:c.value||''});
+        } 
+        if(!tc.length){alert('请添加触发条件');return;} 
+        let ec=[]; 
+        for(let ex of currentExcludeConditions){ 
+            if(ex.field==='属性.自定义'&&!ex.attrKey){alert('请填写排除条件键名');return;} 
+            if(!ex.value){alert('请填写排除条件值');return;} 
+            ec.push({field:ex.field,attrKey:ex.field==='属性.自定义'?ex.attrKey:null,condition:ex.condition,value:ex.value||''});
+        } 
+        let cc=[]; 
+        for(let c of currentCheckConditions){ 
+            if(c.field==='属性.自定义'&&!c.attrKey){alert('请填写检查条件键名');return;} 
+            if(c.condition!=='empty'&&c.condition!=='not_empty'&&!c.value){alert('请填写检查条件值');return;} 
+            cc.push({field:c.field,attrKey:c.field==='属性.自定义'?c.attrKey:null,checkType:c.checkType,condition:c.condition,value:c.value||''});
+        } 
+        if(!cc.length){alert('请添加检查条件');return;} 
+        let err=document.getElementById('ruleErrorMsg').value; 
+        if(editingRuleIndex!==null) qualityRules[editingRuleIndex]={triggerConditions:tc,excludeConditions:ec,checkConditions:cc,errorMsg:err}; 
+        else qualityRules.push({triggerConditions:tc,excludeConditions:ec,checkConditions:cc,errorMsg:err}); 
+        saveQualityRules(); 
+        closeRuleModal(); 
+    }
+    
+    function exportRules() { let blob=new Blob([JSON.stringify(qualityRules,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`质检规则_${new Date().toISOString().slice(0,19)}.json`; a.click(); URL.revokeObjectURL(a.href); }
+    function importRules(file) { let r=new FileReader(); r.onload=function(e){ try{ let imp=JSON.parse(e.target.result); if(Array.isArray(imp)){ qualityRules=imp; saveQualityRules(); alert(`导入${qualityRules.length}条规则`); }else alert('格式错误'); }catch(err){ alert('解析失败'); } }; r.readAsText(file); }
+    function getDisplayProducts() { let p=[...rawData]; if(showOnlyErrors) p=p.filter(pp=>pp._qcErrors&&pp._qcErrors.length>0 && !(pp._qcErrors.length === 1 && pp._qcErrors[0] === '⏳ 质检进行中...')); return p; }
+    
+    function initFilterInputs() { let cont=document.getElementById('filterGrid'); if(!cont) return; cont.innerHTML=filterFields.map(f=>`<div class="filter-item"><label>${getFieldLabel(f)}</label><input type="text" id="f_${f.replace(/\s/g,'_')}" placeholder="请输入" value="${escapeHtml(filterValues[f]||'')}"></div>`).join(''); filterFields.forEach(f=>{let inp=document.getElementById(`f_${f.replace(/\s/g,'_')}`); if(inp) inp.addEventListener('input',(e)=>{filterValues[f]=e.target.value;});}); }
+    function applyFilters() { if(!rawData.length){renderProducts([]);currentProducts=[];return;} let filtered=rawData.filter(item=>{for(let f of filterFields){let fv=filterValues[f]; if(!fv) continue; let iv=item[f]!==undefined&&item[f]!==null?String(item[f]):''; if(filterMode==='exact'){if(iv!==fv) return false;}else{if(!iv.includes(fv)) return false;}} return true;}); if(showOnlyErrors) filtered=filtered.filter(p=>p._qcErrors&&p._qcErrors.length>0 && !(p._qcErrors.length === 1 && p._qcErrors[0] === '⏳ 质检进行中...')); currentProducts=filtered; renderProducts(currentProducts); }
+    function resetFilters() { filterFields.forEach(f=>filterValues[f]=''); initFilterInputs(); applyFilters(); }
+    
+    function renderProducts(products) { 
+        if(!products||products.length===0){grid.innerHTML='<div class="no-result">🐾 没有找到符合条件的商品</div>';return;} 
+        grid.innerHTML=''; 
+        products.forEach((p,idx)=>{ 
+            let imgs=p.首图urls?.length?p.首图urls:[]; 
+            let cid=`car-${p.商品ID||idx}-${Date.now()}-${idx}`; 
+            let priceDisp=p.官方发售价格>0?`¥${p.官方发售价格}`:'无售价'; 
+            let sz=p._sizeTables||{}; 
+            let errs=p._qcErrors||[]; 
+            let hasErr = errs.length > 0 && !(errs.length === 1 && errs[0] === '⏳ 质检进行中...');
+            let isPending = errs.length === 1 && errs[0] === '⏳ 质检进行中...';
+            let pid=p.商品ID||''; 
+            let selfChk=selfCheckStatus[pid]?.checked||false; 
+            let rem=selfCheckStatus[pid]?.remark||''; 
+            let hasSC=sz.sizeChartHtml&&sz.sizeChartHtml!=='<div>暂无尺码表数据</div>'; 
+            let hasTR=sz.trialReportHtml&&sz.trialReportHtml!=='<div>暂无试穿报告数据</div>'; 
+            let hasSR=sz.sizeRecommendHtml&&sz.sizeRecommendHtml!=='<div>暂无尺码推荐数据</div>'; 
+            
+            let matchInfo = null;
+            let qcSku = p.货号 || '';
+            let cleanedQcSku = cleanSkuForMatch(qcSku);
+            if (cleanedQcSku && customMatchMap.has(cleanedQcSku)) {
+                matchInfo = customMatchMap.get(cleanedQcSku);
+            }
+            
+            let szHtml='<div class="size-actions">'; 
+            if(hasSC) szHtml+=`<button class="size-btn" data-type="chart">📏 尺码表</button>`; 
+            if(hasTR) szHtml+=`<button class="size-btn" data-type="trial">👕 试穿报告</button>`; 
+            if(hasSR) szHtml+=`<button class="size-btn" data-type="rec">📊 尺码推荐</button>`; 
+            szHtml+='</div>'; 
+            if(!hasSC&&!hasTR&&!hasSR) szHtml='<div class="size-actions" style="color:#94a3b8;">📋 暂无尺码数据</div>'; 
+            
+            let qcHtml = '';
+            if (isPending) {
+                qcHtml = `<div class="qc-result qc-pending">⏳ 质检进行中<span class="loading-icon-small"></span></div>`;
+            } else if (hasErr) {
+                qcHtml = `<details class="qc-result qc-fail"><summary>⚠️ 不通过(${errs.length})</summary><ul>${errs.map(e=>`<li>${escapeHtml(e)}</li>`).join('')}</ul></details>`;
+            } else {
+                qcHtml = `<div class="qc-result qc-pass">✅ 质检通过</div>`;
+            }
+            
+            let info=''; 
+            let ord=['货号','品牌名称','一级类目名称','二级类目名称','三级类目名称','商品名称','商品来源名称','创建者','上线人员','适用人群','商品系列名称','联名品牌']; 
+            for(let f of ord) if(displayConfig[f]) info+=`<div class="info-row"><span class="info-label">${getFieldLabel(f)}</span><span class="info-value">${escapeHtml(p[f]||'—')}</span></div>`; 
+            if(displayConfig['属性']) info+=`<div class="info-row" style="flex-direction:column;"><span class="info-label">📦 属性</span>${renderAttributes(p.属性)}</div>`; 
+            if(displayConfig['外网链接']){let lnk=p.外网链接; let lh=isValidHttpUrl(lnk)?`<a href="${escapeHtml(lnk)}" target="_blank">打开链接</a>`:'—'; info+=`<div class="info-row"><span class="info-label">🌐 外网链接</span><span class="info-value">${lh}</span></div>`;} 
+            
+            let matchHtml = '';
+            if (matchInfo) {
+                matchHtml = `<div class="match-info">
+                    <span class="match-series">📌 定制前系列：${escapeHtml(matchInfo.seriesName || '无')}</span>
+                    <button class="match-btn" data-custom-id="${escapeHtml(matchInfo.customId)}">🔗 跳转原服链接</button>
+                </div>`;
+            }
+            
+            let selfHtml=`<div class="self-check-area"><label class="self-check-label"><input type="checkbox" class="scb" data-id="${escapeHtml(pid)}" ${selfChk?'checked':''}><span>✅ 已自检</span></label><input type="text" class="remark" data-id="${escapeHtml(pid)}" placeholder="备注" value="${escapeHtml(rem)}"></div>`; 
+            
+            let card=document.createElement('div'); 
+            card.className='product-card'; 
+            card.innerHTML=`<div class="carousel-section"><div class="carousel-container" id="${cid}"><img class="carousel-img" src="${escapeHtml(imgs[0]||'')}" onerror="this.src='https://placehold.co/400x400?text=暂无图'">${imgs.length>1?`<button class="carousel-btn btn-prev">‹</button><button class="carousel-btn btn-next">›</button><div class="image-counter">1/${imgs.length}</div>`:''}</div></div><div class="card-content">${qcHtml}${info}${szHtml}${matchHtml}<div style="display:flex; justify-content:space-between;"><span class="price-tag">${priceDisp}</span><span class="id-link" data-id="${escapeHtml(pid)}">🆔 ID: ${escapeHtml(pid||'—')}</span></div>${selfHtml}</div>`; 
+            grid.appendChild(card); 
+            
+            card.querySelector('.id-link')?.addEventListener('click',(e)=>{let id=e.currentTarget.getAttribute('data-id'); if(id&&id!=='—') jumpToSpuDetail(id);}); 
+            let mBtn=card.querySelector('.match-btn'); if(mBtn) mBtn.addEventListener('click',(e)=>{let cid=mBtn.getAttribute('data-custom-id'); if(cid) jumpToSpuDetail(cid);}); 
+            if(hasSC) card.querySelector('.size-btn[data-type="chart"]')?.addEventListener('click',()=>showModal('📏 尺码表',sz.sizeChartHtml)); 
+            if(hasTR) card.querySelector('.size-btn[data-type="trial"]')?.addEventListener('click',()=>showModal('👕 试穿报告',sz.trialReportHtml)); 
+            if(hasSR) card.querySelector('.size-btn[data-type="rec"]')?.addEventListener('click',()=>showModal('📊 尺码推荐',sz.sizeRecommendHtml)); 
+            
+            let cb=card.querySelector('.scb'); 
+            if(cb) cb.addEventListener('change',function(){let pid2=this.getAttribute('data-id'); if(!selfCheckStatus[pid2]) selfCheckStatus[pid2]={checked:false,remark:''}; selfCheckStatus[pid2].checked=this.checked; localStorage.setItem('selfCheckStatus',JSON.stringify(selfCheckStatus));}); 
+            let rm=card.querySelector('.remark'); 
+            if(rm) rm.addEventListener('blur',function(){let pid2=this.getAttribute('data-id'); if(!selfCheckStatus[pid2]) selfCheckStatus[pid2]={checked:false,remark:''}; selfCheckStatus[pid2].remark=this.value; localStorage.setItem('selfCheckStatus',JSON.stringify(selfCheckStatus));}); 
+            
+            if(imgs.length>1){let cur=0; let cont=card.querySelector(`#${cid}`); if(cont){let img=cont.querySelector('.carousel-img'),cnt=cont.querySelector('.image-counter'),prev=cont.querySelector('.btn-prev'),next=cont.querySelector('.btn-next'); let upd=()=>{img.src=imgs[cur]; if(cnt) cnt.innerText=`${cur+1}/${imgs.length}`;}; prev?.addEventListener('click',(e)=>{e.stopPropagation(); cur=(cur-1+imgs.length)%imgs.length; upd();}); next?.addEventListener('click',(e)=>{e.stopPropagation(); cur=(cur+1)%imgs.length; upd();}); } } 
+        }); 
+    }
+    
+    function exportSelfCheck() { let res=[]; for(let p of rawData){let pid=p.商品ID||''; let st=selfCheckStatus[pid]||{checked:false,remark:''}; res.push({'商品ID':pid,'货号':p.货号||'','商品名称':p.商品名称||'','是否已自检':st.checked?'是':'否','问题备注':st.remark||''});} let headers=['商品ID','货号','商品名称','是否已自检','问题备注']; let csv=[headers]; for(let r of res) csv.push([r['商品ID'],r['货号'],r['商品名称'],r['是否已自检'],r['问题备注']]); let str=csv.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n'); let blob=new Blob(["\uFEFF"+str],{type:'text/csv;charset=utf-8;'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`自检结果_${new Date().toISOString().slice(0,19)}.csv`; a.click(); URL.revokeObjectURL(a.href); }
+    function toggleShowOnlyErrors() { showOnlyErrors=!showOnlyErrors; if(showOnlyErrors){ showOnlyErrorsBtn.style.display='none'; showAllBtn.style.display='inline-block'; filterBadge.style.display='inline-flex'; }else{ showOnlyErrorsBtn.style.display='inline-block'; showAllBtn.style.display='none'; filterBadge.style.display='none'; } applyFilters(); }
+    function showAll() { showOnlyErrors=false; showOnlyErrorsBtn.style.display='inline-block'; showAllBtn.style.display='none'; filterBadge.style.display='none'; applyFilters(); }
+    
+    async function handleCustomExcelUpload(file) { 
+        let r=new FileReader(); 
+        r.onload=function(e){ 
+            let data=new Uint8Array(e.target.result); 
+            let wb=XLSX.read(data,{type:'array'}); 
+            let sheet=wb.Sheets[wb.SheetNames[0]]; 
+            let rows=XLSX.utils.sheet_to_json(sheet); 
+            if(!rows.length){alert('无有效数据');return;} 
+            let um=new Map(); 
+            for(let row of rows){let id=row['商品id']||row['商品ID']||''; if(!um.has(id)&&id) um.set(id,row); else if(!um.has(id)&&!id) um.set(`temp_${Date.now()}_${Math.random()}`,row);} 
+            customRawData=Array.from(um.values()).map(row=>({
+                商品id:row['商品id']||row['商品ID']||'',
+                货号:row['货号']||'',
+                标题:row['标题']||'',
+                类目:row['类目']||'',
+                品牌:row['品牌']||'',
+                外网链接:row['外网链接']||'',
+                系列名称:row['系列名称']||'',
+                商品首图:row['商品首图']||row['首图']||''
+            })); 
+            customCurrentProducts=[...customRawData]; 
+            buildCustomMatchMap();
+            renderCustomProducts(); 
+            if(customCountBadge) customCountBadge.innerText=`${customCurrentProducts.length} 条数据`; 
+        }; 
+        r.readAsArrayBuffer(file); 
+    }
+    
+    function renderCustomProducts() { 
+        let cg=document.getElementById('customProductsGrid'); 
+        if(!cg) return; 
+        if(!customCurrentProducts||customCurrentProducts.length===0){cg.innerHTML='<div class="no-result">📂 请上传定制原服/原鞋 Excel 文件</div>';return;} 
+        cg.innerHTML=''; 
+        customCurrentProducts.forEach(prod=>{ 
+            let imgUrl=prod.商品首图&&prod.商品首图.startsWith('http')?prod.商品首图:'https://placehold.co/400x400?text=暂无图片'; 
+            let card=document.createElement('div'); 
+            card.className='simple-product-card'; 
+            card.innerHTML=`<img class="simple-img" src="${escapeHtml(imgUrl)}" onerror="this.src='https://placehold.co/400x400?text=图片加载失败'"><div class="simple-content"><div class="simple-row"><span class="simple-label">🆔 商品ID</span><span class="simple-id-link" data-id="${escapeHtml(prod.商品id)}">${escapeHtml(prod.商品id||'—')}</span></div><div class="simple-row"><span class="simple-label">📌 货号</span><span>${escapeHtml(prod.货号||'—')}</span></div><div class="simple-row"><span class="simple-label">🏷️ 标题</span><span>${escapeHtml(prod.标题||'—')}</span></div><div class="simple-row"><span class="simple-label">📂 类目</span><span>${escapeHtml(prod.类目||'—')}</span></div><div class="simple-row"><span class="simple-label">🏷️ 品牌</span><span>${escapeHtml(prod.品牌||'—')}</span></div><div class="simple-row"><span class="simple-label">🏷️ 系列名称</span><span>${escapeHtml(prod.系列名称||'—')}</span></div><div class="simple-row"><span class="simple-label">🌐 外网链接</span><span>${isValidHttpUrl(prod.外网链接)?`<a class="simple-link" href="${escapeHtml(prod.外网链接)}" target="_blank">打开链接</a>`:'—'}</span></div></div>`; 
+            cg.appendChild(card); 
+            let idSpan=card.querySelector('.simple-id-link'); 
+            if(idSpan&&prod.商品id&&prod.商品id!=='—') idSpan.addEventListener('click',(e)=>{e.stopPropagation(); jumpToSpuDetail(prod.商品id);}); 
+        }); 
+    }
+    
+    customExcelUpload.addEventListener('change',(e)=>{if(e.target.files&&e.target.files[0]) handleCustomExcelUpload(e.target.files[0]);});
+    
+    function initFieldCheckboxes() { let cont=document.getElementById('fieldCheckboxes'); cont.innerHTML=allFields.map(f=>`<label><input type="checkbox" class="tf-cb" data-field="${f}" ${displayConfig[f]?'checked':''}> ${getFieldLabel(f)}</label>`).join(''); document.querySelectorAll('.tf-cb').forEach(cb=>cb.addEventListener('change',function(){displayConfig[this.dataset.field]=this.checked; renderProducts(currentProducts);})); }
+    resetSettingsBtn.addEventListener('click',()=>{allFields.forEach(f=>displayConfig[f]=true); initFieldCheckboxes(); renderProducts(currentProducts);});
+    function loadSelfCheckStatus() { let s=localStorage.getItem('selfCheckStatus'); if(s) try{selfCheckStatus=JSON.parse(s);}catch(e){} }
+    
+    async function handleExcelUpload(file) { 
+        let r=new FileReader(); 
+        r.onload=async function(e){ 
+            let data=new Uint8Array(e.target.result); 
+            let wb=XLSX.read(data,{type:'array'}); 
+            let sheet=wb.Sheets[wb.SheetNames[0]]; 
+            let rows=XLSX.utils.sheet_to_json(sheet); 
+            if(!rows.length){alert('无有效数据');return;} 
+            rawData=rows.map(row=>{ 
+                let attr={}; 
+                try{if(row['属性']){let p=row['属性']; if(typeof p==='string'&&(p.startsWith('{')||p.startsWith('['))) attr=JSON.parse(p); else if(typeof p==='object') attr=p; else attr={'属性详情':p};}}catch(e){attr={'属性':row['属性']};} 
+                let imgs=[]; 
+                if(row['首图的URL']) imgs=parseImageUrls(row['首图的URL']); 
+                if(!imgs.length&&row['主图url']) imgs=parseImageUrls(row['主图url']); 
+                let price=parseFloat(row['官方发售价格'])||0; 
+                let sizeTables = extractSizeTables(row);
+                return{
+                    商品ID:row['商品ID']||'',货号:row['货号']||'',品牌名称:row['品牌名称']||'',商品名称:row['商品名称']||'',一级类目名称:row['一级类目名称']||'',二级类目名称:row['二级类目名称']||'',三级类目名称:row['三级类目名称']||'',商品来源名称:row['商品来源名称']||'',创建者:row['创建者']||'',上线人员:row['上线人员name']||'',适用人群:row['适用人群']||'',商品系列名称:row['商品系列名称']||'',联名品牌:row['联名品牌']||'',属性:attr,官方发售价格:price,外网链接:row['外网链接']||'',首图urls:imgs,_sizeTables:sizeTables,_qcErrors:[],
+                    _rawSizeJson: sizeTables._rawSizeJson
+                }; 
+            }); 
+            for (let p of rawData) p._qcErrors = ['⏳ 质检进行中...'];
+            showOnlyErrors=false; 
+            showOnlyErrorsBtn.style.display='inline-block'; 
+            showAllBtn.style.display='none'; 
+            filterBadge.style.display='none'; 
+            currentProducts=[...rawData]; 
+            renderProducts(currentProducts); 
+            await performQualityCheckOnAllProducts(); 
+            updateQualityStats(); 
+        }; 
+        r.readAsArrayBuffer(file); 
+    }
+    fileInput.addEventListener('change',(e)=>{if(e.target.files&&e.target.files[0]) handleExcelUpload(e.target.files[0]);});
+    
+    // ========== 渐进式质检函数 ==========
+    async function checkSingleProductQuality(p) { 
+        let e = []; 
+        
+        let dup = checkDuplicateWords(p.商品名称); 
+        if (dup.hasDuplicate) e.push(`🔒 强制规则1：商品名称存在重复词语：${dup.duplicateWords.join('、')}`); 
+        
+        if (p._rawSizeJson) {
+            const sizeErrors = checkSizeTableOrderFromJson(p._rawSizeJson);
+            if (sizeErrors && sizeErrors.length > 0) {
+                sizeErrors.forEach(err => e.push(`🔒 强制规则2：${err}`));
+            }
+        }
+        
+        const compositionErrors = checkCompositionField(p.属性);
+        if (compositionErrors.length > 0) {
+            compositionErrors.forEach(err => e.push(`🔒 强制规则4：${err}`));
+        }
+        
+        // 白底图检测（根据开关决定是否执行）
+        if (whiteBgCheckEnabled) {
+            if (p.首图urls && p.首图urls.length > 0) {
+                const firstImageUrl = p.首图urls[0];
+                if (firstImageUrl && firstImageUrl.startsWith('http')) {
+                    const whiteError = await checkWhiteBackground(firstImageUrl);
+                    if (whiteError) e.push(`🔒 强制规则3：${whiteError}`);
+                } else {
+                    e.push(`🔒 强制规则3：商品首图无效或无法访问`);
+                }
+            } else {
+                e.push(`🔒 强制规则3：商品无首图，无法检测白底`);
+            }
+        }
+        
+        for (let r of qualityRules){ 
+            let allTrig = true; 
+            for (let t of r.triggerConditions){ 
+                let v = getFieldValue(p, t.field, t.attrKey); 
+                if (!checkSingleCondition(v, t.condition, t.value)) { allTrig = false; break; }
+            } 
+            if (allTrig){ 
+                let excl = false; 
+                if (r.excludeConditions && r.excludeConditions.length){
+                    for (let ex of r.excludeConditions){
+                        let ev = getFieldValue(p, ex.field, ex.attrKey); 
+                        if (checkSingleCondition(ev, ex.condition, ex.value)) { excl = true; break; }
+                    }
+                } 
+                if (!excl){ 
+                    let anyOk = false; 
+                    for (let c of r.checkConditions){
+                        let cv = getFieldValue(p, c.field, c.attrKey); 
+                        let met = checkSingleCondition(cv, c.condition, c.value); 
+                        let ok = c.checkType === 'must' ? met : !met; 
+                        if (ok) { anyOk = true; break; }
+                    } 
+                    if (!anyOk) e.push(r.errorMsg || '检查条件不满足'); 
+                } 
+            } 
+        } 
+        return e; 
+    }
+    
+    async function performQualityCheckOnAllProducts() {
+        for (let p of rawData) p._qcErrors = ['⏳ 质检进行中...'];
+        renderProducts(getDisplayProducts());
+        
+        for (let i = 0; i < rawData.length; i++) {
+            const p = rawData[i];
+            const errors = await checkSingleProductQuality(p);
+            p._qcErrors = errors;
+            updateSingleProductCard(p, i);
+        }
+        updateQualityStats();
+    }
+    
+    function updateSingleProductCard(product, index) {
+        const cards = document.querySelectorAll('.product-card');
+        if (index >= cards.length) return;
+        const card = cards[index];
+        if (!card) return;
+        
+        const errs = product._qcErrors || [];
+        const hasErr = errs.length > 0 && !(errs.length === 1 && errs[0] === '⏳ 质检进行中...');
+        const qcHtml = hasErr ? 
+            `<details class="qc-result qc-fail"><summary>⚠️ 不通过(${errs.length})</summary><ul>${errs.map(e=>`<li>${escapeHtml(e)}</li>`).join('')}</ul></details>` : 
+            `<div class="qc-result qc-pass">✅ 质检通过</div>`;
+        
+        const qcDiv = card.querySelector('.qc-result');
+        if (qcDiv) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = qcHtml;
+            const newQcDiv = tempDiv.firstChild;
+            qcDiv.replaceWith(newQcDiv);
+        }
+    }
+    
+    function updateQualityStats() { 
+        let total = 0; 
+        for(let p of rawData) if(p._qcErrors && !(p._qcErrors.length === 1 && p._qcErrors[0] === '⏳ 质检进行中...')) total += p._qcErrors.length; 
+        let sp = document.getElementById('qualityStats'); 
+        if(sp) sp.innerHTML = `${qualityRules.length} 条自定义规则 | 强制规则: 4 条（共 ${total} 个错误）`; 
+    }
+    
+    function toggleQualityRules() { let c=document.getElementById('qualityRulesContent'); c.style.display=c.style.display==='none'?'block':'none'; }
+    function showAddRuleModal() { editingRuleIndex=null; currentTriggerConditions=[{field:'品牌名称',attrKey:null,condition:'equals',value:''}]; currentExcludeConditions=[]; currentCheckConditions=[{field:'属性.自定义',attrKey:'颜色',checkType:'must',condition:'contains',value:''}]; renderAllRuleConditions(); document.getElementById('ruleErrorMsg').value=''; document.getElementById('ruleModalTitle').innerText='添加规则'; document.getElementById('ruleModal').style.display='flex'; }
+    
+    function init() { 
+        loadQualityRules(); 
+        initFieldCheckboxes(); 
+        loadSelfCheckStatus(); 
+        initFilterInputs(); 
+        exportRulesBtn.addEventListener('click',exportRules); 
+        importRulesInput.addEventListener('change',(e)=>{if(e.target.files[0]) importRules(e.target.files[0]);}); 
+        showOnlyErrorsBtn.addEventListener('click',toggleShowOnlyErrors); 
+        showAllBtn.addEventListener('click',showAll); 
+        exportSelfCheckBtn.addEventListener('click',exportSelfCheck); 
+        applyBtn.addEventListener('click',applyFilters); 
+        resetBtn.addEventListener('click',resetFilters); 
+        fuzzyModeBtn.classList.add('active'); 
+        rawData=[]; 
+        currentProducts=[]; 
+        updateGridColumns(); 
+    }
+    init();
+</script>
+</body>
+    <div class="hero-banner">
+        <div class="hero-title">自检完记得点击页面最上方导出质检结果发到群里留痕哦。泰山必胜！！！</div>
+    </div>
+</html>
