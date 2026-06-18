@@ -3,24 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>你飞哥原创出品</title>
+    <title>2026联易稽查表</title>
     <style>
+        /* ========== 全局重置 & 基础样式 ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f5f7fb; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif; padding: 2rem 1.5rem; color: #1e293b; position: relative; }
         .container { max-width: 1800px; margin: 0 auto; }
-        .hero-banner { background: linear-gradient(135deg, #1e293b, #2d3a4e); border-radius: 32px; padding: 1.5rem 2rem; margin-bottom: 2rem; text-align: center; }
-        .hero-title { font-size: 2rem; font-weight: 800; letter-spacing: 2px; color: #FFE8C5; }
+
+        /* ========== 头部 Logo + 标题（完美居中） ========== */
+        .hero-banner {
+            background: linear-gradient(135deg, #1e293b, #2d3a4e);
+            border-radius: 32px;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-logo {
+            height: 100px;
+            width: auto;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #FFE8C5;
+            text-align: center;
+            flex: 0 1 auto;
+        }
+
+        /* ========== 其余样式（与你原来保持一致） ========== */
         .page-tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; background: white; padding: 0.5rem 1.5rem; border-radius: 60px; width: fit-content; border: 1px solid #eef2f8; }
         .tab-btn { padding: 8px 24px; border-radius: 40px; font-size: 0.9rem; font-weight: 600; cursor: pointer; background: #f1f5f9; color: #475569; border: none; transition: all 0.2s; }
         .tab-btn.active { background: #2c3e66; color: white; }
         .toolbar { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; }
-        .toolbar-left { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .toolbar-right { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .toolbar-left { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
+        .toolbar-right { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
         .tool-btn { background: #eef2ff; border: none; padding: 6px 16px; border-radius: 40px; font-size: 0.75rem; cursor: pointer; font-weight: 500; }
         .tool-btn-primary { background: #2c3e66; color: white; }
         .tool-btn-primary:hover { background: #1f3a5f; }
         .tool-btn-danger { background: #fee2e2; color: #dc2626; }
         .tool-btn-success { background: #dcfce7; color: #16a34a; }
+        .tool-btn-warning { background: #fef3c7; color: #92400e; }
+        .tool-btn-warning.active { background: #f59e0b; color: white; }
+        .tool-btn-info { background: #dbeafe; color: #1e40af; }
+        .tool-btn-info.active { background: #3b82f6; color: white; }
         .filter-badge { background: #f1f5f9; padding: 4px 12px; border-radius: 40px; font-size: 0.7rem; display: flex; align-items: center; gap: 6px; }
         .column-control { background: white; border-radius: 28px; padding: 0.8rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; display: flex; align-items: center; justify-content: flex-end; gap: 1rem; flex-wrap: wrap; }
         .column-control label { font-size: 0.75rem; color: #4b6b8f; }
@@ -53,6 +85,8 @@
         .upload-section { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
         .upload-label { background: #2c3e66; color: white; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-size: 0.85rem; display: inline-block; }
         .upload-label:hover { background: #1f3a5f; }
+        .upload-label-bpo { background: #f59e0b; color: white; padding: 8px 20px; border-radius: 40px; cursor: pointer; font-size: 0.85rem; display: inline-block; }
+        .upload-label-bpo:hover { background: #d97706; }
         .filter-panel { background: white; border-radius: 28px; padding: 1rem 1.5rem; margin-bottom: 1.5rem; border: 1px solid #eef2f8; }
         .filter-title { font-weight: 600; margin-bottom: 0.8rem; font-size: 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .filter-mode-buttons { display: flex; gap: 8px; }
@@ -102,6 +136,9 @@
         .match-info { background: #e6f0ff; border-radius: 12px; padding: 6px 10px; margin-top: 6px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.7rem; }
         .match-series { color: #1e4a76; font-weight: 500; }
         .match-btn { background: #2c3e66; color: white; border: none; padding: 4px 12px; border-radius: 30px; font-size: 0.65rem; cursor: pointer; }
+        .bpo-info { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 6px 10px; border-radius: 8px; font-size: 0.7rem; margin-top: 4px; }
+        .bpo-info .bpo-label { font-weight: 600; color: #92400e; }
+        .bpo-info .bpo-items { color: #78350f; }
         .simple-product-card { background: white; border-radius: 20px; overflow: hidden; border: 1px solid #eef2f8; display: flex; flex-direction: column; }
         .simple-img { width: 100%; aspect-ratio: 1 / 1; object-fit: contain; padding: 0.5rem; background: #fafcff; }
         .simple-content { padding: 0.8rem; display: flex; flex-direction: column; gap: 6px; }
@@ -120,12 +157,47 @@
         .add-cond-btn { background: #eef2ff; border: none; border-radius: 20px; padding: 4px 12px; font-size: 0.65rem; cursor: pointer; margin-top: 6px; }
         .loading-icon-small { display: inline-block; width: 10px; height: 10px; border: 2px solid #f3f3f3; border-top: 2px solid #2c3e66; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 6px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @media (max-width: 900px) { .main-layout { flex-direction: column; } .settings-panel { width: 100%; position: static; } .go-top { width: 40px; height: 40px; font-size: 18px; bottom: 20px; right: 20px; } .filter-grid { grid-template-columns: 1fr; } }
+        .toolbar-filter-group { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+        .bpo-upload-area { display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center; }
+
+        /* ========== 底部联系信息 ========== */
+        .footer-contact {
+            margin-top: 3rem;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 28px;
+            border: 1px solid #eef2f8;
+            font-size: 0.95rem;
+            color: #475569;
+        }
+        .footer-contact a {
+            color: #2c3e66;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid #dbeafe;
+            transition: all 0.2s;
+        }
+        .footer-contact a:hover {
+            color: #1f3a5f;
+            border-bottom-color: #2c3e66;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout { flex-direction: column; }
+            .settings-panel { width: 100%; position: static; }
+            .go-top { width: 40px; height: 40px; font-size: 18px; bottom: 20px; right: 20px; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 1.4rem; }
+            .hero-logo { height: 60px; }
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <!-- ====== 头部：Logo + 标题（完美居中） ====== -->
     <div class="hero-banner">
+        <img class="hero-logo" src="https://cdn.poizon.com/trade/gondor/10874757/20260618-d597cd159708136e-w5123h5123.png" alt="公司Logo">
         <div class="hero-title">🍔 为了汉堡 · 🍚 为了大米 · 🚇 为了上海交通卡</div>
     </div>
 
@@ -134,14 +206,21 @@
         <button class="tab-btn" id="tabCustomProduct">👕 定制原商品页面（定制业务匹配用）</button>
     </div>
 
+    <!-- ====== 质检主区域 ====== -->
     <div id="productsArea">
         <div class="toolbar">
             <div class="toolbar-left">
-                <button class="tool-btn tool-btn-primary" id="exportRulesBtn">📤 导出质检规则</button>
-                <label class="tool-btn" style="cursor:pointer;">📥 导入质检规则<input type="file" id="importRulesInput" accept=".json" style="display:none;"></label>
+                <button class="tool-btn tool-btn-primary" id="exportRulesBtn">📤 导出质检规则（二线质检用）</button>
+                <label class="tool-btn" style="cursor:pointer;">📥 导入质检规则（一线用/不导入无法AI检测）<input type="file" id="importRulesInput" accept=".json" style="display:none;"></label>
                 <button class="tool-btn tool-btn-danger" id="showOnlyErrorsBtn">⚠️ 只显示质检不通过</button>
                 <button class="tool-btn" id="showAllBtn" style="display:none;">📋 显示全部商品</button>
-                <button class="tool-btn tool-btn-success" id="exportSelfCheckBtn">💾 导出自检结果</button>
+                <button class="tool-btn tool-btn-success" id="exportSelfCheckBtn">💾 导出自检结果（自检完后留痕用）</button>
+                <div class="toolbar-filter-group" id="bpoFilterGroup" style="display:none;">
+                    <button class="tool-btn tool-btn-info active" id="bpoShowAllBtn">📋 显示全部id</button>
+                    <button class="tool-btn tool-btn-primary" id="bpoShowFullBtn">✅ 显示全审id</button>
+                    <button class="tool-btn tool-btn-warning" id="bpoShowPendingBtn">📌 显示待审核id</button>
+                    <span class="filter-badge" id="bpoCountBadge">BPO: 0 条待审核</span>
+                </div>
             </div>
             <div class="toolbar-right">
                 <div class="filter-badge" id="filterBadge" style="display:none;">🔍 已过滤：仅显示不通过商品</div>
@@ -174,21 +253,15 @@
                     <div>🧵 检查成分含量：每100%为一组，每组内各成分占比总和必须精确等于100%，且按降序排列</div>
                     <div class="rule-error">⚠️ 例如：棉97% 氨纶3% 正确；棉66% 聚酯纤维34% 正确；聚酯纤维34% 棉66% 错误</div>
                 </div>
-                <div class="rule-switch-area" style="flex-direction:column; align-items:flex-start;">
-                    <div style="display:flex; flex-wrap:wrap; gap:12px; width:100%;">
-                        <label class="switch-label">
-                            <input type="checkbox" id="strictEqualCheckbox">
-                            <span>🔘 尺码表严格模式：开启后重复值（相等）也算错误（例如 165 → 165）</span>
-                        </label>
-                        <span style="font-size:0.65rem; color:#6c7a91;">默认关闭，重复值不报错</span>
-                    </div>
-                    <div style="display:flex; flex-wrap:wrap; gap:12px; width:100%; margin-top:4px;">
-                        <label class="switch-label">
-                            <input type="checkbox" id="whiteBgCheckbox" checked>
-                            <span>🖼️ 白底图检测：开启后检测商品首图四角是否为纯白底（#FFFFFF）</span>
-                        </label>
-                        <span style="font-size:0.65rem; color:#6c7a91;">默认开启</span>
-                    </div>
+                <div class="rule-switch-area">
+                    <label class="switch-label">
+                        <input type="checkbox" id="strictEqualCheckbox">
+                        <span>🔘 尺码表严格模式：开启后重复值（相等）也算错误（例如 165 → 165）</span>
+                    </label>
+                    <label class="switch-label">
+                        <input type="checkbox" id="whiteBgCheckbox">
+                        <span>🖼️ 白底图检测：开启后检测商品首图四角是否为纯白底（#FFFFFF）</span>
+                    </label>
                 </div>
                 <div id="rulesList"></div>
                 <button class="add-rule-btn" onclick="showAddRuleModal(null)">+ 添加自定义联动规则</button>
@@ -196,8 +269,14 @@
         </div>
 
         <div class="upload-section">
-            <div><label class="upload-label" for="excelUpload">📂 点击上传质检数据源 Excel</label><input type="file" id="excelUpload" accept=".xlsx, .xls" style="display: none;"></div>
-            <div class="upload-info">上传前确保表里是个人的数据 | 数据太大会造成页面卡死 | 山东泰山是冠军！</div>
+            <div class="bpo-upload-area">
+                <label class="upload-label" for="excelUpload">📂 点击上传质检数据源 (必须上传) Excel</label>
+                <input type="file" id="excelUpload" accept=".xlsx, .xls" style="display: none;">
+                <label class="upload-label-bpo" for="bpoUpload">📋 点击上传BPO待审核id (不上传无待审核项提示)</label>
+                <input type="file" id="bpoUpload" accept=".csv" style="display: none;">
+                <span class="filter-badge" id="bpoStatusBadge" style="display:none;">✅ BPO数据已加载</span>
+            </div>
+            <div class="upload-info">上传前确保表里是个人的数据 | 数据太大会造成页面卡死</div>
         </div>
 
         <div class="filter-panel">
@@ -218,7 +297,7 @@
         <div class="column-control">
             <label>📐 每行显示数量：</label>
             <input type="number" id="columnsPerRow" min="1" max="6" value="2" step="1">
-            <span>（最多可展示6列，飞哥建议展示4列，因为好看）</span>
+            <span>（最多可展示6列，建议展示4列，因为好看）</span>
         </div>
 
         <div class="main-layout">
@@ -233,6 +312,7 @@
         </div>
     </div>
 
+    <!-- ====== 定制原商品页面 ====== -->
     <div id="customProductArea" style="display: none;">
         <div class="toolbar">
             <div class="toolbar-left">
@@ -253,6 +333,7 @@
     </div>
 </div>
 
+<!-- ====== 规则编辑弹窗 ====== -->
 <div id="ruleModal" class="modal-mask" style="display: none;">
     <div class="modal-container" style="max-width: 750px;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
@@ -267,9 +348,23 @@
     </div>
 </div>
 
+<!-- ====== 回到顶部按钮 ====== -->
 <div class="go-top" id="goTopBtn">↑</div>
 
+<!-- ====== 底部联系信息 ====== -->
+<div class="footer-contact">
+    <p>
+        本工具由联易刘鹏飞原创开发，本人享有一切解释权，使用过程中有任何问题可点击添加联系方式：<a href="https://www.feishu.cn/invitation/page/add_contact/?token=3e9v7365-5d16-4dc7-a00b-d4c9d9de19d5&amp;unique_id=QDkbIEdCiUlzkOZ0kyXz3w==" target="_blank" rel="noopener noreferrer">联易刘鹏飞</a>
+    </p>
+    <!-- 在下方添加新的一行 -->
+    <p style="margin-top: 8px; font-size: 0.85rem; color: #6c7a91;">
+        本工具仅为自助参考型自检工具，所有自检表单、检测逻辑均为通用场景设计，仅能提供辅助自查参考，不具备专业精准故障定性的效力，无法覆盖所有个性化、隐蔽性特殊情况，本工具未筛查出部分问题、未识别个别错误，不属于工具开发失误，使用者需如实、完整填写自检信息，严格按照页面指引操作，因信息瞒报、错填、操作不当导致自检结果偏差造成外部质检出错，全部后果自行负责。自检结果仅作初步参考，如有问题务必联系 质检/组长 复核确认，不可直接仅凭本工具结论做决策，凡进入本网页使用自检功能，即视为已完整阅读、完全同意本免责声明全部条款；若不认可，请勿使用本工具。我会持续优化自检规则，但不承诺工具可 100% 识别所有潜在问题，不承担因参考自检结果产生的直接、间接经济或非经济损失。    </p>
+    <p style="margin-top: 8px; font-size: 0.85rem; color: #6c7a91;">
+        功能上次更新时间：2026/06/18  17:43  更新日志：添加白底图识别功能、添加待审核id识别功能，添加尺码表质检功能    </p>
+</div>
+
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <script>
     // ========== 全局变量 ==========
     let currentProducts = [];
@@ -291,7 +386,10 @@
     let currentPage = 'productQc';
     let pageState = { productQc: { scrollTop: 0 }, custom: { scrollTop: 0 } };
     let strictEqualMode = false;
-    let whiteBgCheckEnabled = true;  // 白底图检测开关，默认开启
+    let whiteBgCheckEnabled = false;
+    
+    let bpoData = {};
+    let bpoFilterMode = 'all';
     
     const filterFields = ['货号','品牌名称','一级类目名称','二级类目名称','三级类目名称','商品名称','商品来源名称','创建者','上线人员','适用人群','商品系列名称','联名品牌'];
     let filterValues = {};
@@ -311,37 +409,119 @@
         return str.trim();
     }
     
-    // ========== 成分含量检测：只检测"成分含量"键，按百分比顺序每100%一组 ==========
+    // ========== 导出自检结果（带工作表保护，密码 LYJL，无弹窗） ==========
+    async function exportSelfCheck() {
+        if (rawData.length === 0) {
+            alert('暂无质检数据，请先上传质检Excel');
+            return;
+        }
+        try {
+            let res = []; 
+            for(let p of rawData){
+                let pid = p.商品ID || ''; 
+                let st = selfCheckStatus[pid] || {checked:false, remark:''}; 
+                let bpoInfo = bpoData[pid] || {};
+                let errorCount = 0;
+                if (p._qcErrors && p._qcErrors.length > 0) {
+                    errorCount = p._qcErrors.filter(e => e !== '⏳ 质检进行中...').length;
+                }
+                res.push({
+                    '商品ID': pid,
+                    '货号': p.货号 || '',
+                    '商品名称': p.商品名称 || '',
+                    '质检错误数': errorCount,
+                    '是否已自检': st.checked ? '是' : '否',
+                    '问题备注': st.remark || '',
+                    'BPO待审核项': bpoInfo.待审核项 || ''
+                });
+            } 
+            
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('自检结果');
+            
+            worksheet.getColumn(1).width = 15;
+            worksheet.getColumn(2).width = 20;
+            worksheet.getColumn(3).width = 35;
+            worksheet.getColumn(4).width = 14;
+            worksheet.getColumn(5).width = 12;
+            worksheet.getColumn(6).width = 30;
+            worksheet.getColumn(7).width = 35;
+            
+            const headers = ['商品ID', '货号', '商品名称', '质检错误数', '是否已自检', '问题备注', 'BPO待审核项'];
+            const headerRow = worksheet.addRow(headers);
+            headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+            headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2c3e66' } };
+            headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+            headerRow.height = 25;
+            headerRow.eachCell(cell => { cell.protection = { locked: true }; });
+            
+            for (let item of res) {
+                const row = worksheet.addRow([
+                    item['商品ID'],
+                    item['货号'],
+                    item['商品名称'],
+                    item['质检错误数'],
+                    item['是否已自检'],
+                    item['问题备注'],
+                    item['BPO待审核项']
+                ]);
+                row.alignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
+                row.height = 20;
+                row.eachCell(cell => { cell.protection = { locked: true }; });
+            }
+            
+            worksheet.views = [{ state: 'frozen', ySplit: 1 }];
+            
+            await worksheet.protect('LYJL', {
+                selectLockedCells: true,
+                selectUnlockedCells: false,
+                formatCells: false,
+                formatColumns: false,
+                formatRows: false,
+                insertColumns: false,
+                insertRows: false,
+                insertHyperlinks: false,
+                deleteColumns: false,
+                deleteRows: false,
+                sort: false,
+                autoFilter: false,
+                pivotTables: false
+            });
+            
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `自检结果_${new Date().toISOString().slice(0,19).replace(/[:-]/g, '')}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        } catch(err) {
+            alert('导出失败：' + err.message);
+        }
+    }
+    
+    // ========== 成分含量检测 ==========
     function checkCompositionField(attrObj) {
         if (!attrObj || typeof attrObj !== 'object') return [];
-        
         const compositionValue = attrObj['成分含量'];
         if (!compositionValue || typeof compositionValue !== 'string') return [];
-        
         const str = compositionValue;
-        
         const percentPattern = /(\d+(?:\.\d+)?)%/g;
         const percentList = [];
         let match;
         while ((match = percentPattern.exec(str)) !== null) {
-            percentList.push({
-                value: parseFloat(match[1]),
-                position: match.index,
-                fullMatch: match[0]
-            });
+            percentList.push({ value: parseFloat(match[1]), position: match.index, fullMatch: match[0] });
         }
-        
         if (percentList.length < 2) return [];
-        
         const groups = [];
         let currentGroupIndices = [];
         let currentSum = 0;
-        
         for (let i = 0; i < percentList.length; i++) {
             const p = percentList[i];
             currentGroupIndices.push(i);
             currentSum += p.value;
-            
             if (Math.abs(currentSum - 100) < 0.0001) {
                 groups.push([...currentGroupIndices]);
                 currentGroupIndices = [];
@@ -350,25 +530,19 @@
                 return [`成分含量：百分比累加超过100%（当前累加=${currentSum.toFixed(2)}%），请检查数据格式`];
             }
         }
-        
         if (currentGroupIndices.length > 0 && currentSum > 0) {
             return [`成分含量：百分比累加不足100%（剩余=${currentSum.toFixed(2)}%），请检查数据格式`];
         }
-        
         const errors = [];
-        
         for (let gIdx = 0; gIdx < groups.length; gIdx++) {
             const groupIndices = groups[gIdx];
             if (groupIndices.length < 2) continue;
-            
             const firstPercent = percentList[groupIndices[0]];
             const lastPercent = percentList[groupIndices[groupIndices.length - 1]];
             const startPos = firstPercent.position;
             const endPos = lastPercent.position + lastPercent.fullMatch.length;
             const groupText = str.substring(startPos, endPos);
-            
             const items = [];
-            
             const pattern1 = /([\u4e00-\u9fa5a-zA-Z\s·（）()]+?)(\d+(?:\.\d+)?%)/g;
             let m;
             while ((m = pattern1.exec(groupText)) !== null) {
@@ -380,7 +554,6 @@
                     items.push({ material, percent, percentStr, order: m.index });
                 }
             }
-            
             if (items.length === 0) {
                 const pattern2 = /(\d+(?:\.\d+)?%)([\u4e00-\u9fa5a-zA-Z\s·（）()]+)/g;
                 while ((m = pattern2.exec(groupText)) !== null) {
@@ -393,11 +566,8 @@
                     }
                 }
             }
-            
             if (items.length < 2) continue;
-            
             items.sort((a, b) => a.order - b.order);
-            
             let isDescending = true;
             let errorIdx = -1;
             for (let i = 0; i < items.length - 1; i++) {
@@ -407,13 +577,11 @@
                     break;
                 }
             }
-            
             if (!isDescending) {
                 const orderStr = items.map(item => `${item.material}${item.percentStr}`).join(' → ');
                 errors.push(`成分含量第${gIdx+1}组：${orderStr}，应${items[errorIdx].percent}% ≥ ${items[errorIdx+1].percent}%`);
             }
         }
-        
         return errors;
     }
     
@@ -428,7 +596,6 @@
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                
                 const cornerSize = 10;
                 const corners = [
                     { name: '左上角', x: 0, y: 0 },
@@ -436,9 +603,7 @@
                     { name: '左下角', x: 0, y: img.height - cornerSize },
                     { name: '右下角', x: img.width - cornerSize, y: img.height - cornerSize }
                 ];
-                
                 const failedCorners = [];
-                
                 for (let corner of corners) {
                     let allWhite = true;
                     for (let dx = 0; dx < cornerSize; dx++) {
@@ -447,31 +612,21 @@
                             const y = corner.y + dy;
                             if (x < img.width && y < img.height) {
                                 const pixel = ctx.getImageData(x, y, 1, 1).data;
-                                const r = pixel[0];
-                                const g = pixel[1];
-                                const b = pixel[2];
-                                if (r !== 255 || g !== 255 || b !== 255) {
-                                    allWhite = false;
-                                    break;
-                                }
+                                const r = pixel[0], g = pixel[1], b = pixel[2];
+                                if (r !== 255 || g !== 255 || b !== 255) { allWhite = false; break; }
                             }
                         }
                         if (!allWhite) break;
                     }
-                    if (!allWhite) {
-                        failedCorners.push(corner.name);
-                    }
+                    if (!allWhite) failedCorners.push(corner.name);
                 }
-                
                 if (failedCorners.length > 0) {
                     resolve(`图片四角检测：${failedCorners.join('、')}不是纯白色(#FFFFFF)`);
                 } else {
                     resolve(null);
                 }
             };
-            img.onerror = () => {
-                resolve(`图片加载失败，无法检测白底`);
-            };
+            img.onerror = () => { resolve(`图片加载失败，无法检测白底`); };
             img.src = imageUrl;
         });
     }
@@ -484,9 +639,7 @@
         if (rangeMatch) {
             const min = parseFloat(rangeMatch[1]);
             const max = parseFloat(rangeMatch[2]);
-            if (!isNaN(min) && !isNaN(max)) {
-                return { min: Math.min(min, max), max: Math.max(min, max) };
-            }
+            if (!isNaN(min) && !isNaN(max)) { return { min: Math.min(min, max), max: Math.max(min, max) }; }
         }
         const numMatch = str.match(/(\d+(?:\.\d+)?)/);
         if (numMatch) {
@@ -495,7 +648,6 @@
         }
         return null;
     }
-
     function isValueIncreasing(prevValStr, nextValStr) {
         const prev = parseSizeValue(prevValStr);
         const next = parseSizeValue(nextValStr);
@@ -506,16 +658,13 @@
             return next.min >= prev.min && next.max >= prev.max;
         }
     }
-
     function checkSizeTableOrderFromJson(sizeJsonArray) {
         if (!sizeJsonArray || !Array.isArray(sizeJsonArray) || sizeJsonArray.length === 0) return null;
-        
         const errors = [];
         const type1Items = sizeJsonArray.filter(i => i.type === 1).sort((a,b) => (a.sort||0) - (b.sort||0));
         const type2Items = sizeJsonArray.filter(i => i.type === 2).sort((a,b) => (a.sort||0) - (b.sort||0));
         const allItems = [...type1Items, ...type2Items];
         if (allItems.length === 0) return null;
-        
         const sizeKeys = new Set();
         const keyValuesMap = new Map();
         for (let item of allItems) {
@@ -526,39 +675,29 @@
             }
         }
         if (sizeKeys.size === 0) return null;
-        
         let maxRows = 0;
         for (let [_, values] of keyValuesMap) {
             if (values.length > maxRows) maxRows = values.length;
         }
         if (maxRows < 2) return null;
-        
         const sizeLabelRow = [];
         for (let i = 0; i < maxRows; i++) {
             let label = `第${i+1}行`;
             for (let [key, values] of keyValuesMap) {
                 if (key.includes('尺码') || key === '尺码' || key === 'size' || key === 'Size') {
-                    if (values[i] && values[i].trim()) {
-                        label = values[i].trim();
-                        break;
-                    }
+                    if (values[i] && values[i].trim()) { label = values[i].trim(); break; }
                 }
             }
             sizeLabelRow.push(label);
         }
-        
         for (let [key, values] of keyValuesMap) {
             if (key.includes('尺码') || key === '尺码' || key === 'size' || key === 'Size') continue;
-            
             const validRows = [];
             for (let i = 0; i < values.length; i++) {
                 const parsed = parseSizeValue(values[i]);
-                if (parsed !== null) {
-                    validRows.push({ index: i, rawValue: values[i], parsed });
-                }
+                if (parsed !== null) { validRows.push({ index: i, rawValue: values[i], parsed }); }
             }
             if (validRows.length < 2) continue;
-            
             for (let idx = 0; idx < validRows.length - 1; idx++) {
                 const current = validRows[idx];
                 const next = validRows[idx + 1];
@@ -577,10 +716,7 @@
         for (let item of customCurrentProducts) {
             const originalSku = item.货号;
             if (originalSku && originalSku !== '—') {
-                customMatchMap.set(originalSku, {
-                    customId: item.商品id,
-                    seriesName: item.系列名称 || ''
-                });
+                customMatchMap.set(originalSku, { customId: item.商品id, seriesName: item.系列名称 || '' });
             }
         }
         if (rawData.length) renderProducts(getDisplayProducts());
@@ -627,9 +763,9 @@
     function showMessageModal(message, isError) {
         const modalDiv = document.createElement('div');
         modalDiv.className = 'modal-mask';
-        modalDiv.innerHTML = `<div class="modal-container" style="max-width: 400px; text-align: center;">
+        modalDiv.innerHTML = `<div class="modal-container" style="max-width: 500px; text-align: center;">
             <div style="margin-bottom: 1rem;"><span style="font-size: 3rem;">${isError ? '😅' : '🎉'}</span></div>
-            <div style="font-size: 1rem; margin-bottom: 1.5rem; color: ${isError ? '#dc2626' : '#16a34a'};">${escapeHtml(message)}</div>
+            <div style="font-size: 1rem; margin-bottom: 1.5rem; color: ${isError ? '#dc2626' : '#16a34a'}; white-space: pre-line; text-align: left; padding: 0 10px;">${escapeHtml(message)}</div>
             <button class="btn-filter" onclick="this.closest('.modal-mask').remove()" style="padding: 8px 24px;">确定</button>
         </div>`;
         document.body.appendChild(modalDiv);
@@ -657,6 +793,13 @@
     const customCountBadge = document.getElementById('customCountBadge');
     const strictEqualCheckbox = document.getElementById('strictEqualCheckbox');
     const whiteBgCheckbox = document.getElementById('whiteBgCheckbox');
+    const bpoUpload = document.getElementById('bpoUpload');
+    const bpoStatusBadge = document.getElementById('bpoStatusBadge');
+    const bpoFilterGroup = document.getElementById('bpoFilterGroup');
+    const bpoCountBadge = document.getElementById('bpoCountBadge');
+    const bpoShowAllBtn = document.getElementById('bpoShowAllBtn');
+    const bpoShowFullBtn = document.getElementById('bpoShowFullBtn');
+    const bpoShowPendingBtn = document.getElementById('bpoShowPendingBtn');
     
     if (tabProductQc) tabProductQc.addEventListener('click', switchToProductQc);
     if (tabCustomProduct) tabCustomProduct.addEventListener('click', switchToCustom);
@@ -665,7 +808,6 @@
     if (fuzzyModeBtn) fuzzyModeBtn.addEventListener('click', () => { filterMode = 'fuzzy'; fuzzyModeBtn.classList.add('active'); exactModeBtn.classList.remove('active'); applyFilters(); });
     if (exactModeBtn) exactModeBtn.addEventListener('click', () => { filterMode = 'exact'; exactModeBtn.classList.add('active'); fuzzyModeBtn.classList.remove('active'); applyFilters(); });
     
-    // 尺码表严格模式开关
     if (strictEqualCheckbox) { 
         strictEqualCheckbox.addEventListener('change', (e) => { 
             strictEqualMode = e.target.checked; 
@@ -673,13 +815,114 @@
         }); 
     }
     
-    // 白底图检测开关
     if (whiteBgCheckbox) {
         whiteBgCheckbox.addEventListener('change', (e) => {
             whiteBgCheckEnabled = e.target.checked;
             if (rawData.length) performQualityCheckOnAllProducts();
         });
     }
+    
+    exportSelfCheckBtn.addEventListener('click', exportSelfCheck);
+    
+    function setBpoFilterMode(mode) {
+        bpoFilterMode = mode;
+        [bpoShowAllBtn, bpoShowFullBtn, bpoShowPendingBtn].forEach(btn => btn.classList.remove('active'));
+        if (mode === 'all') bpoShowAllBtn.classList.add('active');
+        else if (mode === 'full') bpoShowFullBtn.classList.add('active');
+        else if (mode === 'pending') bpoShowPendingBtn.classList.add('active');
+        applyFilters();
+    }
+    
+    bpoShowAllBtn.addEventListener('click', () => setBpoFilterMode('all'));
+    bpoShowFullBtn.addEventListener('click', () => setBpoFilterMode('full'));
+    bpoShowPendingBtn.addEventListener('click', () => setBpoFilterMode('pending'));
+    
+    bpoUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                let text = event.target.result;
+                if (text.charCodeAt(0) === 0xFEFF) {
+                    text = text.slice(1);
+                }
+                const lines = text.split('\n').filter(line => line.trim());
+                if (lines.length < 2) {
+                    alert('CSV文件为空或只有表头');
+                    return;
+                }
+                const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+                const idIdx = headers.findIndex(h => h === '商品ID');
+                const linkIdx = headers.findIndex(h => h === '链接');
+                const timeIdx = headers.findIndex(h => h === '提取时间');
+                const auditIdx = headers.findIndex(h => h === '待审核项');
+                
+                if (idIdx === -1 || auditIdx === -1) {
+                    alert('CSV格式错误：缺少"商品ID"或"待审核项"列。当前表头：' + headers.join(', '));
+                    return;
+                }
+                
+                bpoData = {};
+                let loadedCount = 0;
+                for (let i = 1; i < lines.length; i++) {
+                    const cols = [];
+                    let current = '';
+                    let inQuotes = false;
+                    const row = lines[i];
+                    for (let j = 0; j < row.length; j++) {
+                        const char = row[j];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            cols.push(current);
+                            current = '';
+                        } else {
+                            current += char;
+                        }
+                    }
+                    cols.push(current);
+                    
+                    const cleanedCols = cols.map(c => c.trim().replace(/^"|"$/g, ''));
+                    
+                    const id = cleanedCols[idIdx] || '';
+                    const auditItems = cleanedCols[auditIdx] || '';
+                    const link = linkIdx !== -1 ? (cleanedCols[linkIdx] || '') : '';
+                    const time = timeIdx !== -1 ? (cleanedCols[timeIdx] || '') : '';
+                    
+                    if (id && auditItems) {
+                        bpoData[id] = { 
+                            商品ID: id, 
+                            链接: link, 
+                            提取时间: time, 
+                            待审核项: auditItems 
+                        };
+                        loadedCount++;
+                    }
+                }
+                
+                const count = Object.keys(bpoData).length;
+                if (count === 0) {
+                    alert('没有解析到有效的BPO数据，请检查CSV格式');
+                    return;
+                }
+                
+                bpoStatusBadge.style.display = 'inline-block';
+                bpoStatusBadge.textContent = `✅ BPO数据已加载 (${count}条待审核)`;
+                bpoFilterGroup.style.display = 'flex';
+                bpoCountBadge.textContent = `BPO: ${count} 条待审核`;
+                setBpoFilterMode('pending');
+                showMessageModal(`成功加载 ${count} 条BPO待审核数据`, false);
+                
+                if (rawData.length) {
+                    applyFilters();
+                }
+            } catch(err) {
+                alert('解析CSV失败: ' + err.message);
+            }
+        };
+        reader.readAsText(file);
+    });
     
     window.addEventListener('scroll', () => { pageState[currentPage].scrollTop = window.scrollY; goTopBtn.classList.toggle('show', window.scrollY > 300); });
     goTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -717,15 +960,40 @@
     function getFieldValue(p,f,ak=null) { if(f==='属性.自定义') return p.属性?.[ak]||''; return p[f]!==undefined&&p[f]!==null?p[f]:''; }
     function checkSingleCondition(val,cond,exp) { let av=val===undefined||val===null?'':String(val), ex=exp||''; switch(cond){case'contains':return av.includes(ex); case'not_contains':return!av.includes(ex); case'equals':return av===ex; case'not_equals':return av!==ex; case'empty':return av===''||av==='—'; case'not_empty':return av!==''&&av!=='—'; case'greater_than':return parseFloat(val)>parseFloat(ex); case'less_than':return parseFloat(val)<parseFloat(ex); default:return true;} }
     function checkDuplicateWords(name) { if(!name||name==='—') return null; let w=[]; let c=/[\u4e00-\u9fa5]{2,}/g,m; while((m=c.exec(name))!==null) w.push(m[0]); let e=/[a-zA-Z]+/g; while((m=e.exec(name))!==null) w.push(m[0].toLowerCase()); let n=/\d{2,}/g; while((m=n.exec(name))!==null) w.push(m[0]); let cnt={}; for(let t of w) cnt[t]=(cnt[t]||0)+1; let dup=[]; for(let [word,count] of Object.entries(cnt)) if(count>=2) dup.push(word); return dup.length?{hasDuplicate:true,duplicateWords:dup}:{hasDuplicate:false,duplicateWords:[]}; }
-    function loadQualityRules() { let s=localStorage.getItem('qualityRules_multi_trigger'); if(s) try{qualityRules=JSON.parse(s);}catch(e){qualityRules=[];} if(qualityRules.length===0) qualityRules=[{triggerConditions:[{field:'品牌名称',attrKey:null,condition:'equals',value:'露露'},{field:'属性.自定义',attrKey:'颜色',condition:'contains',value:'红色'}],excludeConditions:[],checkConditions:[{field:'属性.自定义',attrKey:'颜色',checkType:'must',condition:'contains',value:'red'}],errorMsg:'露露品牌的红色商品，颜色属性中必须包含"red"'}]; saveQualityRules(); }
-    function saveQualityRules() { localStorage.setItem('qualityRules_multi_trigger',JSON.stringify(qualityRules)); updateQualityUI(); if(rawData.length){performQualityCheckOnAllProducts();} }
-    function updateQualityUI() { let rd=document.getElementById('rulesList'); if(rd){ rd.innerHTML=qualityRules.map((r,i)=>{ let tt=r.triggerConditions.map(t=>{let d=t.field==='属性.自定义'?`属性.${t.attrKey}`:t.field; return `${d} ${getCondText(t.condition)} ${t.value||''}`;}).join(' 且 '); let et=r.excludeConditions&&r.excludeConditions.length?`<span style="background:#cffafe;padding:0 4px;border-radius:12px;">⛔ 除非 ${r.excludeConditions.map(e=>{let f=e.field==='属性.自定义'?`属性.${e.attrKey}`:e.field; return `${f} ${getCondText(e.condition)} ${e.value||''}`;}).join(' 或 ')}</span>`:''; let ct=r.checkConditions.map(c=>{let fd=c.field==='属性.自定义'?`属性.${c.attrKey}`:c.field; let tp=c.checkType==='must'?'必须':'禁止'; return `${tp} ${fd} ${getCondText(c.condition)} ${c.value||''}`;}).join(' 或 '); return `<div class="rule-item"><div>🔹 如果 ${escapeHtml(tt)} ${et}，则 ${escapeHtml(ct)}</div><div style="color:#dc2626;">⚠️ ${escapeHtml(r.errorMsg||'条件不满足')}</div><div class="rule-actions"><button class="edit-rule" onclick="editRule(${i})">✏️编辑规则</button><button class="copy-rule" onclick="copyRule(${i})">📋复制规则</button><button class="delete-rule" onclick="deleteRule(${i})">🗑️删除规则</button></div></div>`;}).join(''); } updateQualityStats(); }
+    function loadQualityRules() { 
+        let s = localStorage.getItem('qualityRules_multi_trigger'); 
+        if(s) try{ qualityRules = JSON.parse(s); } catch(e){ qualityRules = []; } 
+        // 删除露露示例规则，只保留自定义规则
+        if (qualityRules.length > 0) {
+            // 检查并移除露露示例规则（根据errorMsg判断）
+            qualityRules = qualityRules.filter(r => {
+                if (r.errorMsg && r.errorMsg.includes('露露')) {
+                    return false;
+                }
+                return true;
+            });
+            saveQualityRules();
+        }
+        saveQualityRules(); 
+    }
+    function saveQualityRules() { localStorage.setItem('qualityRules_multi_trigger', JSON.stringify(qualityRules)); updateQualityUI(); if(rawData.length){ performQualityCheckOnAllProducts(); } }
+    function updateQualityUI() { 
+        let rd = document.getElementById('rulesList'); 
+        if(rd){ 
+            rd.innerHTML = qualityRules.map((r, i) => { 
+                let tt = r.triggerConditions.map(t => { let d = t.field === '属性.自定义' ? `属性.${t.attrKey}` : t.field; return `${d} ${getCondText(t.condition)} ${t.value || ''}`; }).join(' 且 '); 
+                let et = r.excludeConditions && r.excludeConditions.length ? `<span style="background:#cffafe;padding:0 4px;border-radius:12px;">⛔ 除非 ${r.excludeConditions.map(e => { let f = e.field === '属性.自定义' ? `属性.${e.attrKey}` : e.field; return `${f} ${getCondText(e.condition)} ${e.value || ''}`; }).join(' 或 ')}</span>` : ''; 
+                let ct = r.checkConditions.map(c => { let fd = c.field === '属性.自定义' ? `属性.${c.attrKey}` : c.field; let tp = c.checkType === 'must' ? '必须' : '禁止'; return `${tp} ${fd} ${getCondText(c.condition)} ${c.value || ''}`; }).join(' 或 '); 
+                return `<div class="rule-item"><div>🔹 如果 ${escapeHtml(tt)} ${et}，则 ${escapeHtml(ct)}</div><div style="color:#dc2626;">⚠️ ${escapeHtml(r.errorMsg || '条件不满足')}</div><div class="rule-actions"><button class="edit-rule" onclick="editRule(${i})">✏️编辑规则</button><button class="copy-rule" onclick="copyRule(${i})">📋复制规则</button><button class="delete-rule" onclick="deleteRule(${i})">🗑️删除规则</button></div></div>`; 
+            }).join(''); 
+        } 
+        updateQualityStats(); 
+    }
     function getCondText(c) { const m={contains:'包含',not_contains:'不包含',equals:'等于',not_equals:'不等于',empty:'为空',not_empty:'不为空',greater_than:'大于',less_than:'小于'}; return m[c]||c; }
     function deleteRule(i) { if(confirm('确定删除？')){ qualityRules.splice(i,1); saveQualityRules(); } }
     function editRule(i) { let r=qualityRules[i]; editingRuleIndex=i; currentTriggerConditions=JSON.parse(JSON.stringify(r.triggerConditions)); currentExcludeConditions=JSON.parse(JSON.stringify(r.excludeConditions||[])); currentCheckConditions=JSON.parse(JSON.stringify(r.checkConditions)); renderAllRuleConditions(); document.getElementById('ruleErrorMsg').value=r.errorMsg||''; document.getElementById('ruleModalTitle').innerText='编辑规则'; document.getElementById('ruleModal').style.display='flex'; }
     function copyRule(i) { let r=JSON.parse(JSON.stringify(qualityRules[i])); if(r.errorMsg) r.errorMsg+=' (副本)'; else r.errorMsg='规则副本'; qualityRules.push(r); saveQualityRules(); showMessageModal('复制成功',false); }
     
-    // ========== 统一渲染规则条件 ==========
     function renderAllRuleConditions() {
         renderTriggerConditionsUI();
         renderExcludeConditionsUI();
@@ -735,7 +1003,6 @@
     function renderTriggerConditionsUI() { 
         let cont = document.getElementById('triggerConditionsContainer'); 
         if (!cont) return; 
-        
         cont.innerHTML = currentTriggerConditions.map((c, i) => `
             <div class="condition-item" data-trigger-idx="${i}">
                 <select class="tf" data-idx="${i}" style="min-width:100px;">
@@ -763,7 +1030,6 @@
                 ${currentTriggerConditions.length > 1 ? `<button class="remove-cond-btn" onclick="removeTriggerCondition(${i})">删</button>` : ''}
             </div>
         `).join('');
-        
         document.querySelectorAll('.tf').forEach(sel => {
             sel.removeEventListener('change', handleTriggerFieldChange);
             sel.addEventListener('change', handleTriggerFieldChange);
@@ -782,39 +1048,17 @@
         });
     }
     
-    function handleTriggerFieldChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentTriggerConditions[idx].field = e.target.value;
-        renderTriggerConditionsUI();
-    }
-    function handleTriggerConditionChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentTriggerConditions[idx].condition = e.target.value;
-        renderTriggerConditionsUI();
-    }
-    function handleTriggerValueInput(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentTriggerConditions[idx].value = e.target.value;
-    }
-    function handleTriggerAttrKeyInput(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentTriggerConditions[idx].attrKey = e.target.value;
-    }
+    function handleTriggerFieldChange(e) { let idx = parseInt(e.target.dataset.idx); currentTriggerConditions[idx].field = e.target.value; renderTriggerConditionsUI(); }
+    function handleTriggerConditionChange(e) { let idx = parseInt(e.target.dataset.idx); currentTriggerConditions[idx].condition = e.target.value; renderTriggerConditionsUI(); }
+    function handleTriggerValueInput(e) { let idx = parseInt(e.target.dataset.idx); currentTriggerConditions[idx].value = e.target.value; }
+    function handleTriggerAttrKeyInput(e) { let idx = parseInt(e.target.dataset.idx); currentTriggerConditions[idx].attrKey = e.target.value; }
     
-    function addTriggerCondition() { 
-        currentTriggerConditions.push({field:'品牌名称', attrKey:null, condition:'equals', value:''}); 
-        renderTriggerConditionsUI(); 
-    }
-    function removeTriggerCondition(idx) { 
-        currentTriggerConditions.splice(idx,1); 
-        renderTriggerConditionsUI(); 
-    }
+    function addTriggerCondition() { currentTriggerConditions.push({field:'品牌名称', attrKey:null, condition:'equals', value:''}); renderTriggerConditionsUI(); }
+    function removeTriggerCondition(idx) { currentTriggerConditions.splice(idx,1); renderTriggerConditionsUI(); }
     
-    // ========== 排除条件渲染 ==========
     function renderExcludeConditionsUI() { 
         let cont = document.getElementById('excludeConditionsContainer'); 
         if (!cont) return; 
-        
         cont.innerHTML = currentExcludeConditions.map((c, i) => `
             <div class="condition-item" data-exclude-idx="${i}">
                 <select class="ef" data-idx="${i}" style="min-width:100px;">
@@ -832,7 +1076,6 @@
                 <button class="remove-cond-btn" onclick="removeExcludeCondition(${i})">删</button>
             </div>
         `).join('');
-        
         document.querySelectorAll('.ef').forEach(sel => {
             sel.removeEventListener('change', handleExcludeFieldChange);
             sel.addEventListener('change', handleExcludeFieldChange);
@@ -851,38 +1094,17 @@
         });
     }
     
-    function handleExcludeFieldChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentExcludeConditions[idx].field = e.target.value;
-        renderExcludeConditionsUI();
-    }
-    function handleExcludeConditionChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentExcludeConditions[idx].condition = e.target.value;
-    }
-    function handleExcludeValueInput(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentExcludeConditions[idx].value = e.target.value;
-    }
-    function handleExcludeAttrKeyInput(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentExcludeConditions[idx].attrKey = e.target.value;
-    }
+    function handleExcludeFieldChange(e) { let idx = parseInt(e.target.dataset.idx); currentExcludeConditions[idx].field = e.target.value; renderExcludeConditionsUI(); }
+    function handleExcludeConditionChange(e) { let idx = parseInt(e.target.dataset.idx); currentExcludeConditions[idx].condition = e.target.value; }
+    function handleExcludeValueInput(e) { let idx = parseInt(e.target.dataset.idx); currentExcludeConditions[idx].value = e.target.value; }
+    function handleExcludeAttrKeyInput(e) { let idx = parseInt(e.target.dataset.idx); currentExcludeConditions[idx].attrKey = e.target.value; }
     
-    function addExcludeCondition() { 
-        currentExcludeConditions.push({field:'商品名称', attrKey:null, condition:'contains', value:''}); 
-        renderExcludeConditionsUI(); 
-    }
-    function removeExcludeCondition(idx) { 
-        currentExcludeConditions.splice(idx,1); 
-        renderExcludeConditionsUI(); 
-    }
+    function addExcludeCondition() { currentExcludeConditions.push({field:'商品名称', attrKey:null, condition:'contains', value:''}); renderExcludeConditionsUI(); }
+    function removeExcludeCondition(idx) { currentExcludeConditions.splice(idx,1); renderExcludeConditionsUI(); }
     
-    // ========== 检查条件渲染 ==========
     function renderCheckConditionsUI() { 
         let cont = document.getElementById('checkConditionsContainer'); 
         if (!cont) return; 
-        
         cont.innerHTML = currentCheckConditions.map((c, i) => `
             <div class="condition-item" data-check-idx="${i}">
                 <select class="cf" data-idx="${i}" style="min-width:100px;">
@@ -906,7 +1128,6 @@
                 ${currentCheckConditions.length > 1 ? `<button class="remove-cond-btn" onclick="removeCheckCondition(${i})">删</button>` : ''}
             </div>
         `).join('');
-        
         document.querySelectorAll('.cf').forEach(sel => {
             sel.removeEventListener('change', handleCheckFieldChange);
             sel.addEventListener('change', handleCheckFieldChange);
@@ -929,36 +1150,14 @@
         });
     }
     
-    function handleCheckFieldChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentCheckConditions[idx].field = e.target.value;
-        renderCheckConditionsUI();
-    }
-    function handleCheckTypeChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentCheckConditions[idx].checkType = e.target.value;
-    }
-    function handleCheckConditionChange(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentCheckConditions[idx].condition = e.target.value;
-    }
-    function handleCheckValueInput(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentCheckConditions[idx].value = e.target.value;
-    }
-    function handleCheckAttrKeyInput(e) {
-        let idx = parseInt(e.target.dataset.idx);
-        currentCheckConditions[idx].attrKey = e.target.value;
-    }
+    function handleCheckFieldChange(e) { let idx = parseInt(e.target.dataset.idx); currentCheckConditions[idx].field = e.target.value; renderCheckConditionsUI(); }
+    function handleCheckTypeChange(e) { let idx = parseInt(e.target.dataset.idx); currentCheckConditions[idx].checkType = e.target.value; }
+    function handleCheckConditionChange(e) { let idx = parseInt(e.target.dataset.idx); currentCheckConditions[idx].condition = e.target.value; }
+    function handleCheckValueInput(e) { let idx = parseInt(e.target.dataset.idx); currentCheckConditions[idx].value = e.target.value; }
+    function handleCheckAttrKeyInput(e) { let idx = parseInt(e.target.dataset.idx); currentCheckConditions[idx].attrKey = e.target.value; }
     
-    function addCheckCondition() { 
-        currentCheckConditions.push({field:'商品名称', attrKey:null, checkType:'forbidden', condition:'contains', value:''}); 
-        renderCheckConditionsUI(); 
-    }
-    function removeCheckCondition(idx) { 
-        currentCheckConditions.splice(idx,1); 
-        renderCheckConditionsUI(); 
-    }
+    function addCheckCondition() { currentCheckConditions.push({field:'商品名称', attrKey:null, checkType:'forbidden', condition:'contains', value:''}); renderCheckConditionsUI(); }
+    function removeCheckCondition(idx) { currentCheckConditions.splice(idx,1); renderCheckConditionsUI(); }
     
     function closeRuleModal() { document.getElementById('ruleModal').style.display='none'; }
     function addQualityRule() { 
@@ -991,10 +1190,40 @@
     
     function exportRules() { let blob=new Blob([JSON.stringify(qualityRules,null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`质检规则_${new Date().toISOString().slice(0,19)}.json`; a.click(); URL.revokeObjectURL(a.href); }
     function importRules(file) { let r=new FileReader(); r.onload=function(e){ try{ let imp=JSON.parse(e.target.result); if(Array.isArray(imp)){ qualityRules=imp; saveQualityRules(); alert(`导入${qualityRules.length}条规则`); }else alert('格式错误'); }catch(err){ alert('解析失败'); } }; r.readAsText(file); }
-    function getDisplayProducts() { let p=[...rawData]; if(showOnlyErrors) p=p.filter(pp=>pp._qcErrors&&pp._qcErrors.length>0 && !(pp._qcErrors.length === 1 && pp._qcErrors[0] === '⏳ 质检进行中...')); return p; }
+    
+    function getDisplayProducts() { 
+        let p = [...rawData]; 
+        if (showOnlyErrors) {
+            p = p.filter(pp => pp._qcErrors && pp._qcErrors.length > 0 && !(pp._qcErrors.length === 1 && pp._qcErrors[0] === '⏳ 质检进行中...'));
+        }
+        if (bpoFilterMode === 'pending') {
+            p = p.filter(pp => bpoData[pp.商品ID]);
+        } else if (bpoFilterMode === 'full') {
+            p = p.filter(pp => !bpoData[pp.商品ID]);
+        }
+        return p;
+    }
     
     function initFilterInputs() { let cont=document.getElementById('filterGrid'); if(!cont) return; cont.innerHTML=filterFields.map(f=>`<div class="filter-item"><label>${getFieldLabel(f)}</label><input type="text" id="f_${f.replace(/\s/g,'_')}" placeholder="请输入" value="${escapeHtml(filterValues[f]||'')}"></div>`).join(''); filterFields.forEach(f=>{let inp=document.getElementById(`f_${f.replace(/\s/g,'_')}`); if(inp) inp.addEventListener('input',(e)=>{filterValues[f]=e.target.value;});}); }
-    function applyFilters() { if(!rawData.length){renderProducts([]);currentProducts=[];return;} let filtered=rawData.filter(item=>{for(let f of filterFields){let fv=filterValues[f]; if(!fv) continue; let iv=item[f]!==undefined&&item[f]!==null?String(item[f]):''; if(filterMode==='exact'){if(iv!==fv) return false;}else{if(!iv.includes(fv)) return false;}} return true;}); if(showOnlyErrors) filtered=filtered.filter(p=>p._qcErrors&&p._qcErrors.length>0 && !(p._qcErrors.length === 1 && p._qcErrors[0] === '⏳ 质检进行中...')); currentProducts=filtered; renderProducts(currentProducts); }
+    function applyFilters() { 
+        if(!rawData.length){renderProducts([]);currentProducts=[];return;} 
+        let filtered = getDisplayProducts();
+        filtered = filtered.filter(item => {
+            for(let f of filterFields){
+                let fv = filterValues[f];
+                if(!fv) continue;
+                let iv = item[f] !== undefined && item[f] !== null ? String(item[f]) : '';
+                if(filterMode === 'exact'){
+                    if(iv !== fv) return false;
+                } else {
+                    if(!iv.includes(fv)) return false;
+                }
+            }
+            return true;
+        });
+        currentProducts = filtered; 
+        renderProducts(currentProducts); 
+    }
     function resetFilters() { filterFields.forEach(f=>filterValues[f]=''); initFilterInputs(); applyFilters(); }
     
     function renderProducts(products) { 
@@ -1020,6 +1249,12 @@
             let cleanedQcSku = cleanSkuForMatch(qcSku);
             if (cleanedQcSku && customMatchMap.has(cleanedQcSku)) {
                 matchInfo = customMatchMap.get(cleanedQcSku);
+            }
+            
+            let bpoInfo = bpoData[pid];
+            let bpoHtml = '';
+            if (bpoInfo && bpoInfo.待审核项) {
+                bpoHtml = `<div class="bpo-info"><span class="bpo-label">📋 待审核项：</span><span class="bpo-items">${escapeHtml(bpoInfo.待审核项)}</span></div>`;
             }
             
             let szHtml='<div class="size-actions">'; 
@@ -1056,7 +1291,7 @@
             
             let card=document.createElement('div'); 
             card.className='product-card'; 
-            card.innerHTML=`<div class="carousel-section"><div class="carousel-container" id="${cid}"><img class="carousel-img" src="${escapeHtml(imgs[0]||'')}" onerror="this.src='https://placehold.co/400x400?text=暂无图'">${imgs.length>1?`<button class="carousel-btn btn-prev">‹</button><button class="carousel-btn btn-next">›</button><div class="image-counter">1/${imgs.length}</div>`:''}</div></div><div class="card-content">${qcHtml}${info}${szHtml}${matchHtml}<div style="display:flex; justify-content:space-between;"><span class="price-tag">${priceDisp}</span><span class="id-link" data-id="${escapeHtml(pid)}">🆔 ID: ${escapeHtml(pid||'—')}</span></div>${selfHtml}</div>`; 
+            card.innerHTML=`<div class="carousel-section"><div class="carousel-container" id="${cid}"><img class="carousel-img" src="${escapeHtml(imgs[0]||'')}" onerror="this.src='https://placehold.co/400x400?text=暂无图'">${imgs.length>1?`<button class="carousel-btn btn-prev">‹</button><button class="carousel-btn btn-next">›</button><div class="image-counter">1/${imgs.length}</div>`:''}</div></div><div class="card-content">${qcHtml}${bpoHtml}${info}${szHtml}${matchHtml}<div style="display:flex; justify-content:space-between;"><span class="price-tag">${priceDisp}</span><span class="id-link" data-id="${escapeHtml(pid)}">🆔 ID: ${escapeHtml(pid||'—')}</span></div>${selfHtml}</div>`; 
             grid.appendChild(card); 
             
             card.querySelector('.id-link')?.addEventListener('click',(e)=>{let id=e.currentTarget.getAttribute('data-id'); if(id&&id!=='—') jumpToSpuDetail(id);}); 
@@ -1074,7 +1309,6 @@
         }); 
     }
     
-    function exportSelfCheck() { let res=[]; for(let p of rawData){let pid=p.商品ID||''; let st=selfCheckStatus[pid]||{checked:false,remark:''}; res.push({'商品ID':pid,'货号':p.货号||'','商品名称':p.商品名称||'','是否已自检':st.checked?'是':'否','问题备注':st.remark||''});} let headers=['商品ID','货号','商品名称','是否已自检','问题备注']; let csv=[headers]; for(let r of res) csv.push([r['商品ID'],r['货号'],r['商品名称'],r['是否已自检'],r['问题备注']]); let str=csv.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n'); let blob=new Blob(["\uFEFF"+str],{type:'text/csv;charset=utf-8;'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`自检结果_${new Date().toISOString().slice(0,19)}.csv`; a.click(); URL.revokeObjectURL(a.href); }
     function toggleShowOnlyErrors() { showOnlyErrors=!showOnlyErrors; if(showOnlyErrors){ showOnlyErrorsBtn.style.display='none'; showAllBtn.style.display='inline-block'; filterBadge.style.display='inline-flex'; }else{ showOnlyErrorsBtn.style.display='inline-block'; showAllBtn.style.display='none'; filterBadge.style.display='none'; } applyFilters(); }
     function showAll() { showOnlyErrors=false; showOnlyErrorsBtn.style.display='inline-block'; showAllBtn.style.display='none'; filterBadge.style.display='none'; applyFilters(); }
     
@@ -1163,26 +1397,20 @@
     }
     fileInput.addEventListener('change',(e)=>{if(e.target.files&&e.target.files[0]) handleExcelUpload(e.target.files[0]);});
     
-    // ========== 渐进式质检函数 ==========
     async function checkSingleProductQuality(p) { 
         let e = []; 
-        
         let dup = checkDuplicateWords(p.商品名称); 
         if (dup.hasDuplicate) e.push(`🔒 强制规则1：商品名称存在重复词语：${dup.duplicateWords.join('、')}`); 
-        
         if (p._rawSizeJson) {
             const sizeErrors = checkSizeTableOrderFromJson(p._rawSizeJson);
             if (sizeErrors && sizeErrors.length > 0) {
                 sizeErrors.forEach(err => e.push(`🔒 强制规则2：${err}`));
             }
         }
-        
         const compositionErrors = checkCompositionField(p.属性);
         if (compositionErrors.length > 0) {
             compositionErrors.forEach(err => e.push(`🔒 强制规则4：${err}`));
         }
-        
-        // 白底图检测（根据开关决定是否执行）
         if (whiteBgCheckEnabled) {
             if (p.首图urls && p.首图urls.length > 0) {
                 const firstImageUrl = p.首图urls[0];
@@ -1196,7 +1424,6 @@
                 e.push(`🔒 强制规则3：商品无首图，无法检测白底`);
             }
         }
-        
         for (let r of qualityRules){ 
             let allTrig = true; 
             for (let t of r.triggerConditions){ 
@@ -1229,7 +1456,6 @@
     async function performQualityCheckOnAllProducts() {
         for (let p of rawData) p._qcErrors = ['⏳ 质检进行中...'];
         renderProducts(getDisplayProducts());
-        
         for (let i = 0; i < rawData.length; i++) {
             const p = rawData[i];
             const errors = await checkSingleProductQuality(p);
@@ -1244,13 +1470,11 @@
         if (index >= cards.length) return;
         const card = cards[index];
         if (!card) return;
-        
         const errs = product._qcErrors || [];
         const hasErr = errs.length > 0 && !(errs.length === 1 && errs[0] === '⏳ 质检进行中...');
         const qcHtml = hasErr ? 
             `<details class="qc-result qc-fail"><summary>⚠️ 不通过(${errs.length})</summary><ul>${errs.map(e=>`<li>${escapeHtml(e)}</li>`).join('')}</ul></details>` : 
             `<div class="qc-result qc-pass">✅ 质检通过</div>`;
-        
         const qcDiv = card.querySelector('.qc-result');
         if (qcDiv) {
             const tempDiv = document.createElement('div');
@@ -1279,7 +1503,6 @@
         importRulesInput.addEventListener('change',(e)=>{if(e.target.files[0]) importRules(e.target.files[0]);}); 
         showOnlyErrorsBtn.addEventListener('click',toggleShowOnlyErrors); 
         showAllBtn.addEventListener('click',showAll); 
-        exportSelfCheckBtn.addEventListener('click',exportSelfCheck); 
         applyBtn.addEventListener('click',applyFilters); 
         resetBtn.addEventListener('click',resetFilters); 
         fuzzyModeBtn.classList.add('active'); 
@@ -1291,6 +1514,6 @@
 </script>
 </body>
     <div class="hero-banner">
-        <div class="hero-title">自检完记得点击页面最上方导出质检结果发到群里留痕哦。泰山必胜！！！</div>
+        <div class="hero-title">重要：自检完切记回到页面最上方导出质检结果进行留痕操作！！！可直接点击右侧箭头回到最上放→</div>
     </div>
 </html>
